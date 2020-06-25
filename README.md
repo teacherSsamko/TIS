@@ -1,2 +1,2 @@
 # TIS
-Today I studied
+Today I studied when working
