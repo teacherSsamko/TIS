@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-component
+            v-for="(item, index) in myArray"
+            v-bind:my-name="item">
+        </my-component>
+    </div>
+    
+    <script>
+        var MyComponent = {
+            template: '<p class="my-comp">나는 {{ myName }} 입니다.</p>',
+            props: {
+                myName: String
+            },
+            created: function() {
+                if (this.myName == null) {
+                    this.myName = "이름 없음";
+                }
+            }
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                myArray:['철수','영희','희철','광수','이슬']
+            },
+            components: {
+                'my-component': MyComponent
+            }
+        })
+    </script>
+
+    <style>
+        .my-comp {
+            width: 300px;
+            background-color: #ffffe0;
+            border: solid;
+            border-color: darkorange;
+            border-radius: 8px;
+            padding: 8px;
+        }
+    </style>
+</body>
+</html>

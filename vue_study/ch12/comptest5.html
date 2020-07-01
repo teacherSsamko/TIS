@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <my-component v-for="i in 10" v-bind:number="i"></my-component>
+    </div>
+    
+    <script>
+        var MyComponent = {
+            template:"<p>{{ result }}</p>",
+            props: {
+                number: Number
+            },
+            computed: {
+                result: function() {
+                    if (this.number%2 == 0){
+                        return this.number + "은 짝수입니다."
+                    } else {
+                        return this.number + "은 홀수입니다."
+                    }
+                }
+            }
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                
+            },
+            components: {
+                "my-component":MyComponent
+            }
+        })
+
+
+    </script>
+</body>
+</html>
