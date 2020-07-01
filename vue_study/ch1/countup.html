@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ch1</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <my-component></my-component>
+    </div>
+
+    <script>
+        var MyComponent = {
+            template: "<p class='my-app'><button v-on:click='addOne'>counter</button>{{ count }}</p>",
+            data: function() {
+                return {
+                    count: 0
+                }
+            },
+            methods: {
+                addOne: function() {
+                    this.count++;
+                }
+            },
+        }
+
+        new Vue({
+            el: '#app',
+
+
+            components: {
+                "my-component": MyComponent
+            }
+        })
+    </script>
+
+    <style>
+        .my-app {
+            background-color: darkorange;
+        }
+    </style>
+</body>
+
+</html>
