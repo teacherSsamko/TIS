@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>{{ myPrice * 1.08 }}</p> 
+       <p>{{ "안녕하세요~ " + myName + "님" }}</p> 
+       <p>{{ myName.substr(0,1) }}</p> 
+    </div>    
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myPrice: 500,
+                myName: '이은섭'
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>{{ myTea }}</p> 
+       <p>{{ myTea[1].name }} {{ myTea[1].price }}원</p> 
+    </div>    
+
+    <script>
+        myTeaList = [
+            {name:'dazzling', price: 4000},
+            {name:'red tea', price: 2000},
+            {name:'coffe', price: 5000},
+
+        ]
+
+        new Vue({
+            el: '#app',
+            data: {
+                myTea: myTeaList
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p v-text="myText"></p>
+        <p>{{ myText }}</p>
+        <p v-html="myHtmlText"></p>
+        <p>숫자 {{ myNumber }}</p>
+        <p>부울형 {{ myBool }}</p>
+        <p>array {{ myArray }}</p>
+        <p>object {{ myObject }}</p>
+        <p>{{ $data }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myText: 'Vue study like this',
+                myHtmlText: '<h3> with tag </h3>',
+                myNumber: 12321,
+                myBool: true,
+                myArray: [1,2,3,4,5],
+                myObject: [
+                    {name:'dazzling', price:600},
+                    {name:'ulgray', price:500},
+                    {name:'xylon', price:550},
+                ]
+            }
+        })
+    </script>
+</body>
+</html>
