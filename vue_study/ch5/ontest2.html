@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>{{count}}</p> 
+       <button 
+       :disabled="isClicked"
+       @click="like">like</button>
+    </div>
+
+    <script>
+        function good() {
+            alert('nice')
+        }
+        new Vue({
+            el: '#app',
+            data: {
+                count: 11,
+                isClicked: false
+            },
+            methods: {
+                like: function(){
+                    this.count++;
+                    this.isClicked = true;
+                    good()
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h2>simple calculator</h2>
+    <div id="app">
+        <input v-model.number="n1"><input v-model.number="n2">
+        <button @click="sum">sum</button>
+        <button @click="sub">sub</button>
+        <button @click="multi">multiply</button>
+        <button @click="devide">devide</button>
+        <p>result is {{ result }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                n1: 0,
+                n2: 0,
+                result: 0
+            },
+            methods: {
+                sum: function(){
+                    this.result = this.n1 + this.n2
+                },
+                sub: function(){
+                    this.result = this.n1 - this.n2
+                },
+                multi: function(){
+                    this.result = this.n1 * this.n2
+                },
+                devide: function(){
+                    this.result = this.n1 / this.n2
+                }
+            }
+        })
+    </script>
+</body>
+</html>

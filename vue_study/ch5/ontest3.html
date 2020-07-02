@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>{{ count }}</p> 
+       <button @click="countUp(1)">add 1</button>
+       <button @click="countUp(10)">add 10</button>
+       <button @click="countUp(100)">add 100</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                count: 0
+            },
+            methods: {
+                countUp: function(count){
+                    this.count += count
+                }
+            }
+        })
+    </script>
+</body>
+</html>
