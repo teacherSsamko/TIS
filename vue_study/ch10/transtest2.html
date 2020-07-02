@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <transition-group>
+           <li v-for="item in dataArray" 
+           :key="item">{{ item }}</li>
+       </transition-group> 
+       <label><input v-model="addItem" placeholder="to add list"
+        @keyup.enter="addList"></label>
+       <button @click="addList">add</button><br>
+       <button @click="removeLast">remove last</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                dataArray: ['rose', 'sunflower', 'banila', 'tulip'],
+                addItem: ''
+            },
+            methods: {
+                addList: function(){
+                    this.dataArray.push(this.addItem)
+                    this.addItem = ''
+                },
+                removeLast: function() {
+                    this.dataArray.splice(-1, 1)
+                }
+            }
+        })
+    </script>
+
+    <style>
+        .v-enter-active, .v-leave-active {
+            transition: 0.5s;
+        }
+        .v-enter, .v-leave-to {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+    </style>
+</body>
+</html>

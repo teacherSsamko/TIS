@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <transition-group>
+            <li v-for="item in dataArray"
+            :key="item">{{item}}</li>
+        </transition-group>
+        <button @click="shuffleData">shuffle</button>
+        <button @click="sortData">sort</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                dataArray: ['one', 'two', 'three', 'four', 'five']
+            },
+            methods: {
+                shuffleData: function(){
+                    var buffer = [];
+                    var len = this.dataArray.length;
+                    for(let i=len; len>0; len--){
+                        var r = Math.floor(Math.random() * len);
+                        buffer.push(this.dataArray[r])
+                        this.dataArray.splice(r, 1)
+                    }
+                    this.dataArray = buffer
+                },
+                sortData: function() {
+                    this.dataArray.sort(function(a,b){
+                        return (a < b) ? -1:1
+                    })
+                }
+            }
+        })
+    </script>
+
+    <style>
+        .v-enter-active, .v-leave-active {
+            transition: 0.3;
+        }
+        .v-enter, .v-leave-to {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .v-move {
+            transition: 1s;
+        }
+    </style>
+</body>
+</html>

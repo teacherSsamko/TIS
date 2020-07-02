@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h2>shuffle on click</h2>
+    <button onclick="shuffleData()">shuffle</button>
+    <div id="app">
+        
+    </div>
+
+    <script>
+        var dataArray = ['one', 'two', 'three', 'four', 'five'];
+        function shuffleData(){
+            var buffer = []
+            var len = this.dataArray.length
+            for(var i=len; len>0; len--){
+                var r = Math.floor(Math.random() * len);
+                buffer.push(this.dataArray[r])
+                this.dataArray.splice(r, 1)
+            }
+            this.dataArray = buffer
+            alert(dataArray)
+        }
+    </script>
+</body>
+</html>
