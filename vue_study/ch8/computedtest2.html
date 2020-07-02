@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <input v-model.number="price" type="number">won
+       <input v-model.number="count" type="number">ea 
+       <p>sum: {{ sum }}</p>
+       <p>with VAT: {{ taxIncluded }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                price: 0,
+                count: 0
+            },
+            computed: {
+                sum: function(){
+                    return this.price * this.count;
+                },
+                taxIncluded: function(){
+                    return this.sum * 1.08;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

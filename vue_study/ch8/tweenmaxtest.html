@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+</head>
+<body>
+    <h2>TweenMax Test</h2>
+    <button id="moveBtn" type="button" onclick="myMove()">move</button><br>
+    <button onclick="reset()">reset</button>
+    <div id="app">
+
+    </div>
+
+    <script>
+        function myMove(){
+            TweenMax.to('#moveBtn', 1, {x: "700px"})
+        }
+        function reset(){
+            TweenMax.to('#moveBtn', 0.2, {x: "0px"})
+        }
+    </script>
+</body>
+</html>

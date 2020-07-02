@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h2>Type in limited time</h2>
+    <div id="app">
+        <p>forbidden word(multiple words with ,)
+            <input v-model="forbiddenWord">
+        </p>
+        <p>
+            time limit(sec): 
+            <input v-model.number="timeLimit" type="number">
+            <button @click="startTimer">start</button>
+        </p>
+        <p>time left {{ remainTime }} sec</p>
+        <textarea rows="30" cols="30" v-model="inputText"
+        :disabled="isDisabled"></textarea>
+        <p>you typed {{ inputText.length }} characters</p>
+        <p>punished: {{ punish }} (12points/ word)</p>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                forbiddenWord: '',
+                forbiddenList: [],
+                timeLimit: 0,
+                inputText: '',
+                isDisabled: true,
+                punish: 0,
+                timerObj: null,
+            },
+            methods: {
+                startTimer: function(){
+                    this.timerObj = setInterval(() => { this.remainTime--; }, 1000)
+                }
+            },
+            watch: {
+                inputText: function(){
+
+                },
+                forbiddenWord: function(){
+                    
+                },
+            },
+            computed: {
+                remainTime: function(){
+
+                },
+                punish: function(){
+
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>

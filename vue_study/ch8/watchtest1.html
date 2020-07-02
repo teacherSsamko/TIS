@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>forbidden word: {{ forbiddenText }}</p> 
+       <textarea v-model="inputText"></textarea>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                inputText: '',
+                forbiddenText: 'hi'
+            },
+            watch: {
+                inputText: function(){
+                    var pos = this.inputText.indexOf(this.forbiddenText)
+                    if(pos >= 0){
+                        alert(this.forbiddenText + 'cannot typed')
+                        this.inputText = this.inputText.substr(0,pos)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

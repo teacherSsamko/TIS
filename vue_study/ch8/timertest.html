@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <h2>Timer</h2> 
+       <p>{{ count }}</p>
+       <button @click="timerStart">timer start</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                count: 5,
+                timerObj: null,
+            },
+            methods: {
+                timerStart: function(){
+                    this.count = 5;
+                    this.timerObj = setInterval(() => { this.count-- }, 1000)
+                }
+            },
+            watch: {
+                count: function(){
+                    if (this.count <= 0){
+                        alert("time out")
+                        clearInterval(this.timerObj)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

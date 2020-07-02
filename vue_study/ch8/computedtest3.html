@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p>text limit 140</p>
+       <textarea v-model="myText"></textarea> 
+       <p 
+       :style="{color: computedColor}">남은 글자: {{remaining}}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myText: '',
+            },
+            computed: {
+                remaining: function(){
+                    return 140 - this.myText.length;
+                },
+                computedColor: function(){
+                    var color = '';
+                    if (this.remaining > 130){
+                        color = '#ffffff'
+                    } else if(this.remaining > 100){
+                        color = 'green'
+                    } else if(this.remaining > 50) {
+                        color = 'orange'
+                    } else {
+                        color = 'red'
+                    }
+                    return color
+                }
+
+            }
+        })
+    </script>
+</body>
+</html>
