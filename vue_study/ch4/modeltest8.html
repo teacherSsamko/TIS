@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <select v-model="myColor">
+           <option disabled value="">choose color</option>
+           <option>red</option>
+           <option>green</option>
+           <option>blue</option>
+           <option>blown</option>
+           <option>black</option>
+           <option>orange</option>
+       </select> 
+       <p
+       :style="{color: myColor}">you choose color {{myColor}}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myColor: ''
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <label><input type="checkbox" v-model="myChecks" value="red">red</label>
+       <label><input type="checkbox" v-model="myChecks" value="blue">blue</label>
+       <label><input type="checkbox" v-model="myChecks" value="green">green</label>
+       color you choose {{ myChecks }}
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myChecks: []
+            }
+        })
+    </script>
+</body>
+</html>

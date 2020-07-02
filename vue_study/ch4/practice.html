@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h2>Input practice</h2>
+    <div id="app">
+        이름: <input v-model.lazy="myName"><br>
+        좋아하는 색은: <br>
+        <label><input v-model="myColor" type="radio" value="red">red</label><br>
+        <label><input v-model="myColor" type="radio" value="green">green</label><br>
+        <label><input v-model="myColor" type="radio" value="blue">blue</label><br>
+        <label><input v-model="myColor" type="radio" value="gray">gray</label><br>
+        <label><input v-model="myColor" type="radio" value="yellow">yellow</label><br>
+        <hr>
+        <p 
+        :style="{color: myColor}">My name is {{ myName }} and my favorite color is {{ myColor }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myName: '',
+                myColor: ''
+            }
+        })
+    </script>
+</body>
+</html>

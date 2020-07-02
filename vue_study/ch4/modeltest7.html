@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <label><input type="radio" value="face1.png" v-model="fileName">face1</label> <br>
+       <label><input type="radio" value="face2.png" v-model="fileName">face2</label> <br>
+       <p>{{fileName}} selected</p>
+       <img
+       :src="fileName">
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                fileName: ''
+            }
+        })
+    </script>
+</body>
+</html>

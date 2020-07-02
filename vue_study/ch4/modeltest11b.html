@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <input v-model="myPhone">
+       <p>010 - {{myPhone.substr(0,4)}} - {{myPhone.substr(4,4)}}</p> 
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myPhone: ''
+            }
+        })
+    </script>
+</body>
+</html>
