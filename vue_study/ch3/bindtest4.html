@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <p style="color: #E80;">direct color</p> 
+       <p 
+       :style="{color: myColor}">v-bind color</p>
+       <hr>
+       <p style="font-size: 200%">direc font-size</p>
+       <p
+       :style="{fontSize: mySize}">v-bind font-size</p>
+       <hr>
+       <p style="background-color: aqua;">direct bgcolor</p>
+       <p
+       :style="{backgroundColor: myBGColor}">v-bind bgcolor</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myColor: '#E08000',
+                mySize: '200%',
+                myBGColor: 'aqua'
+            }
+        })
+    </script>
+</body>
+</html>

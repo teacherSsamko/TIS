@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p class="strike-through">direct class</p>
+        <p
+        :class="myClass">v-bind class</p>
+        <p
+        :class="[myClass, darkClass]">v-bind multi class</p>
+        <p
+        :class="{'strike-through': isON}">class on/off with data</p>
+        {{isON}}
+        <my-button></my-button>
+        
+    </div>
+
+    <script>
+        var myButton = {
+            template: '<button v-on:click="darkOn">dark</button>',
+            data: function() {
+                return {
+                    isON: true
+                }
+            },
+            methods: {
+                darkOn: function() {
+                    this.isON = !this.isON
+                }
+            }
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                myClass: "strike-through",
+                darkClass: 'dark',
+                isON: true
+            },
+            components: {
+                "my-button": myButton
+            }
+        })
+    </script>
+
+    <style>
+        .strike-through {
+            text-decoration: line-through;
+            color: lightgray;
+        }
+        .dark {
+            background-color: gray;
+        }
+    </style>
+</body>
+</html>

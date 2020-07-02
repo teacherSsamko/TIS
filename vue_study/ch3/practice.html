@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p><a
+            :href="naver">naver</a></p>
+        <p>
+            <img
+            :src="face2">face2.png
+        </p>
+        <p
+        :align="left">
+            align left
+        </p>
+        <p
+        :align="right">align right
+        </p>
+        <p
+        :align="center">align center</p>
+        <p
+        :style="{color: myRed}">color red</p>
+        <p
+        :style="{fontSize: mySize}">size 150%</p>
+        <p
+        :style="{fontSize: mySize, color: myRed, backgroundColor: myBGC}">++BGC</p>
+        <p
+        :class="blueUnderline">class</p>
+        <p
+        :class="[blueUnderline, strikeThrough]">multi class</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                naver: "http://naver.com",
+                face2: "face2.png",
+                left: 'left',
+                right: 'right',
+                center: 'center',
+                myRed: 'red',
+                mySize: '150%',
+                myBGC: 'yellow',
+                blueUnderline: 'blue-underline',
+                strikeThrough: 'strike-through'
+            }
+
+        })
+    </script>
+
+    <style>
+        .blue-underline {
+            text-decoration: underline;
+            color: blue;
+        }
+        .strike-through {
+            text-decoration: line-through;
+        }
+    </style>
+</body>
+</html>
