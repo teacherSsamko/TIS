@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in myArray">{{ item }}</li>
+        </ul>
+        <button @click="addLast">add on the last</button><br>
+        <button @click="addObj(2)">add on 3rd</button><br>
+        <button @click="changeObj(0)">change 1st</button><br>
+        <button @click="deleteObj(1)">delete 2nd</button><br>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: ['1st','2nd','3rd','4th','5th']
+            },
+            methods: {
+                addLast: function(){
+                    this.myArray.push("[add on the last]");
+                },
+                addObj: function(i) {
+                    this.myArray.splice(i, 0, '[add]');
+                },
+                changeObj: function(i) {
+                    this.myArray.splice(i, 1, '[changed]');
+                },
+                deleteObj: function(i){
+                    this.myArray.splice(i, 1);
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>

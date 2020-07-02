@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <ul>
+           <li v-for="item in myArray">{{ item }}</li>
+       </ul> 
+       <button @click="sortData(myArray)">sort</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: ['one', 'two', 'three', 'four', 'five']
+            },
+            methods: {
+                sortData: function(arr){
+                    arr.sort(function(a,b){
+                        return (a<b) ? -1 : 1;
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>

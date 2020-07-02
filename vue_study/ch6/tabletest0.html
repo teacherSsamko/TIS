@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <table>
+           <thead>
+               <th v-for="head in header">{{head}}</th>
+           </thead>
+           <tbody>
+               <tr v-for="row in ranking">
+                   <td v-for="item in row">{{item}}</td>
+               </tr>
+           </tbody>
+       </table> 
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                header: [ "프로그램언어",2018,2013,2008,2003,1998],
+				ranking: [
+					['Java',1,2,1,1,16],
+					['C',2,1,2,2,1],
+					['C++',3,4,3,3,2],
+					['Python',4,7,6,11,23],
+					['JavaScript',7,10,8,7,20]
+				]
+            }
+        })
+    </script>
+
+    <style>
+        table, td, th {
+            border: solid;
+            border-collapse: collapse;
+        }
+    </style>
+</body>
+</html>

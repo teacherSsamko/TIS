@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <ul>
+           <li v-for="(num, index) in myArray">{{ num }}
+           <button @click="countUp(index)">+1</button>
+           <button @click="deleteOne(index)">delete</button>
+           </li>
+       </ul> 
+       <button @click="addOne">add 1</button>
+       <button @click="sortNum">sort</button>
+       <button @click="multiTable">show table</button>
+       <ul v-if="isShow" v-for="num in myArray">
+           <li v-for="i in 9">{{num}} * {{i}} = {{ num * i }}</li>
+       </ul>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: [2,3,4,5,6,7,8,9],
+                isShow: false
+            },
+            methods: {
+                countUp: function(i){
+                    this.myArray.splice(i, 1, this.myArray[i]+1)
+                },
+                deleteOne: function(i){
+                    this.myArray.splice(i, 1)
+                },
+                addOne: function(){
+                    this.myArray.push(1)
+                },
+                sortNum: function(){
+                    this.myArray = this.myArray.filter(function(item, idx, array){
+                        return array.indexOf(item) === idx;
+                    })
+                    this.myArray = this.myArray.sort(function(a, b){
+                        return (a < b) ? -1: 1
+                    })
+                },
+                multiTable: function(){
+                    this.isShow = true
+                }
+            }
+        })
+    </script>
+</body>
+</html>

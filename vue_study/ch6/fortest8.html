@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+       <ul>
+           <li v-for="num in myArray">{{ num }}</li>
+       </ul> 
+       <button @click="sortOdd">odd</button>
+       <button @click="sortEven">even</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: [1,2,3,4,5,6],
+                myArrayRef: [1,2,3,4,5,6]
+            },
+            methods: {
+                sortOdd: function(){
+                    this.myArray = this.myArrayRef.filter(
+                        function(value) { return value % 2 != 0}
+                    )
+                },
+                sortEven: function(){
+                    this.myArray = this.myArrayRef.filter(
+                        function(value) { return value % 2 == 0 }
+                    )
+                }
+            }
+        })
+    </script>
+</body>
+</html>
