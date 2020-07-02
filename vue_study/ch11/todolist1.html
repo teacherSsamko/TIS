@@ -7,15 +7,18 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+    <h2>To Do List</h2>
     <div id="app">
-        <input v-model="toDo">
-        <transition-group>
-            <label v-for="item in toDoList" 
-            :key="item">
-            <input type="checkbox" v-model="done"
-            :class="isDone"
-            @keyup.enter="addItem">{{ item }}</label>
-        </transition-group>
+        <input type="text"
+        v-model="toDo"
+        @keyup.enter="addItem">
+        <div v-for="item in toDoList" >
+        <label>
+        <input type="checkbox" v-model="item.done">
+            <span :class="{strikethrough:item.done}">{{ item.thing }}</span>
+        </label>
+
+        </div>
         <p>{{completedCount}}/{{totalCount}}</p>
     </div>
 
@@ -24,24 +27,34 @@
             el: '#app',
             data: {
                 toDo: '',
-                toDoList: [],
-                done: false,
-                completedList: []
+                toDoList: [
+                    {done:false, thing:'coffe'},
+                    {done:false, thing:'book'}
+                ],
             },
             methods: {
                 addItem: function(){
-                    this.toDoList.push(this.toDo);
+                    this.toDoList.push({done:false, thing:this.toDo});
+                    this.toDo = ''
                 }
             },
             computed: {
                 completedCount: function(){
-                    return completedList.length
+                    return this.toDoList.filter(function(val){
+                        return val.done == true;
+                    }).length;
                 },
                 totalCount: function(){
-                    return toDoList.length + completedList.length
+                    return this.toDoList.length
                 }
             }
         })
     </script>
+    <style>
+        .strikethrough {
+            text-decoration: line-through;
+            color: lightgray;
+        }
+    </style>
 </body>
 </html>
