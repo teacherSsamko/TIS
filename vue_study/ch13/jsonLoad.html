@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <h2>JSON read example</h2>
+    <div id="app">
+        <input type="file" 
+        @change="onFileChange">
+        <p>loaded data = {{ loadData }}</p>
+    </div>
+
+    <script>
+
+
+        function loadFile(e) {
+            file = e.target.files[0]
+            if ( file){
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    console.log(">>>"+ e.target.result)
+                    json = JSON.parse(e.target.result)
+                    console.log(">>>" + json[0].title)
+                    console.log(">>>" + json[0].body)
+                }
+                reader.readAsText(file)
+            }
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                loadData: '',
+            },
+            methods: {
+                onFileChange: function(e) {
+                    file = e.target.files[0]
+                    if ( file ){
+                        var reader = new FileReader();
+                        var vm = this;
+                        reader.onload = function(e){
+                            console.log(">>>"+ e.target.result)
+                            json = JSON.parse(e.target.result)
+                            console.log(">>>" + json[0].title)
+                            console.log(">>>" + json[0].body)
+                            vm.loadData = json
+                        }
+                        reader.readAsText(file)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
