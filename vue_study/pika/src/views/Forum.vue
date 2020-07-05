@@ -2,9 +2,8 @@
   <v-container class>
     <v-row>Forum</v-row>
 
-    <BoardList :List="boardList" />
-    <button class="btn btn-primary">write</button>
-    <Write />
+    <BoardList v-if="listOn" :List="boardList" @writePageOn="writePageOn" />
+    <Write v-if="writeOn" @cancelWrite="listPageOn" />
   </v-container>
 </template>
 
@@ -20,7 +19,17 @@ export default {
     Write
   },
   data: () => ({
-    boardList: ex_list.board
-  })
+    boardList: ex_list.board,
+    listOn: true,
+    writeOn: false
+  }),
+  methods: {
+    writePageOn: function() {
+      (this.listOn = false), (this.writeOn = true);
+    },
+    listPageOn: function() {
+      (this.listOn = true), (this.writeOn = false);
+    }
+  }
 };
 </script>

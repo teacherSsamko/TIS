@@ -55,6 +55,7 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
+    <v-btn @click="writePageOn">write</v-btn>
   </v-container>
 </template>
 
@@ -62,9 +63,15 @@
 export default {
   name: "BoardList",
   props: {
-    List: Array
+    List: Array,
+    listOn: Boolean,
+    writeOn: Boolean
   },
-  created: () => ({}),
-  data: () => ({})
+  data: () => ({}),
+  methods: {
+    writePageOn: function() {
+      this.$emit("writePageOn");
+    }
+  }
 };
 </script>
