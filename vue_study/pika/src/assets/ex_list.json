@@ -1,0 +1,24 @@
+{
+    "board": [
+
+        {
+            "no": 1,
+            "user": "ssamko",
+            "category": "help",
+            "title": "hi",
+            "content": "gdf",
+            "view": 11,
+            "like": 1,
+            "reg_date": "2020-07-01 18:07"
+        }, {
+            "no": 2,
+            "user": "Jamie",
+            "category": "idea",
+            "title": "hello",
+            "content": "ring ding dong",
+            "view": 31,
+            "like": 10,
+            "reg_date": "2020-07-03 08:17"
+        }
+    ]
+}
