@@ -28,7 +28,7 @@
       class="mx-auto mb-4"
       color="#26c6da"
       dark
-      max-width="400"
+      max-width="90%"
       v-for="(item) in List"
       :key="item.no"
     >
@@ -55,7 +55,12 @@
         </v-list-item>
       </v-card-actions>
     </v-card>
-    <v-btn @click="writePageOn">write</v-btn>
+    <v-row justify="end">
+      <v-btn class="mr-12" @click="writePageOn">write</v-btn>
+      <!-- <router-link to="{name:'Write'}">
+        <v-btn class="mr-12">write</v-btn>
+      </router-link>-->
+    </v-row>
   </v-container>
 </template>
 
@@ -75,3 +80,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.v-card {
+  cursor: pointer;
+}
+.v-card:hover {
+  color: yellow;
+}
+</style>
