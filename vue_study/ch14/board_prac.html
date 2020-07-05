@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>simple board</h2>
+
+    <div id="app">
+        <p>import json file</p>
+        <button @click="saveBoardList">save this board</button>
+        <my-board-list
+        v-if="listOk"
+        :object="dataArray['board']"
+        @board-read="boardRead"
+        @board-write="boardWrite"
+        @board-delete="boardDelete"></my-board-list>
+        <my-board-read
+        v-if="readOk"
+        :object="boardInfo"
+        @board-list="boardList"></my-board-read>
+        <my-board-write
+        v-if="writeOk"
+        @board-list="boardList"
+        @board-save="boardSave"></my-board-write>
+        <input type="file" @change="loadData">
+    </div>
+    <script>
+        
+
+        var MyBoardList = {
+            props: ["object"],
+            template: `<div><table id="list">\n` +
+                `           <tr>\n` +
+                    `           <th style="width:50px">#</th>\n` +
+                    `           <th>title</th>\n` +
+                    `           <th style="width:50px">read</th>\n`+
+                    `           <th style="width:70px"></th>\n` +
+                `           </tr>\n` +
+                `           <tr v-for="item in object" :key="item.no">` +
+                    `           <td>{{item.no}}</td>` +
+                    `           <td @click="boardRead(item)">{{item.title}}</td>` +
+                    `           <td>{{item.view}}</td>` +
+                    `           <td><button @click="boardDelete(item.no)">delete</button></td></tr>` +
+                    `   </table>` +
+                    `<button @click="boardWrite" style="float: right;">write</button></div>`,
+            methods: {
+                boardRead: function(info){
+                    this.$emit('board-read', info);
+                },
+                boardWrite: function() {
+                    this.$emit('board-write');
+                },
+                boardDelete: function(no) {
+                    this.$emit('board-delete', no)
+                }
+            }                    
+        }
+
+        var MyBoardRead = {
+            props: ["object"],
+            template: `<div><table id="list">\n` +
+                `           <tr>\n` +
+                    `           <td style="width:50px">title</td>\n ` +
+                    `           <td>{{ object.title}}</td>\n`+
+                    `       </tr>\n` +
+                    `       <tr style="height:300px">\n` +
+                        `       <td colspan="2">{{object.content}}</td>\n` +
+                        `   </td></tr>\n` +
+                        `</table>` +
+                        `<button @click="boardList" style="float: right;">list</button></div>`,
+            methods: {
+                boardList: function(){
+                    this.$emit('board-list')
+                }
+            }
+        }
+
+        var MyBoardWirte = {
+            template: `
+                <div><table id="list">
+                    <tr>
+                        <td>title</td>
+                        <td><input type="text" v-model="title" style="width:90%"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><textarea v-model="content" style="width:100%"></textarea></td>
+                    </tr>
+                </table>
+                <button @click="boardList" style="float: right">list</button>
+                <button @click="boardSave" style="float: right">save</button>
+                </div>
+            `,
+            methods: {
+                boardList: function(){
+                    this.$emit('board-list')
+                },
+                boardSave: function(){
+                    this.$emit('board-save', this.title, this.content)
+                }
+            },
+            data: function(){
+                return {
+                    title: "",
+                    content: ""
+                }
+            }
+        }
+        new Vue({
+            el: '#app',
+            data:{
+                dataArray:[],
+                listOk: false,
+                readOk: false,
+                writeOk: false,
+                boardInfo: {}
+            },
+            components: {
+                'my-board-list': MyBoardList,
+                'my-board-read': MyBoardRead,
+                'my-board-write': MyBoardWirte
+            },
+            methods: {
+                loadData: function(e){
+                    file = e.target.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        var vm = this;
+                        reader.readAsText(file);
+                        reader.onload = function(e){
+                            vm.dataArray = JSON.parse(e.target.result)
+                        }
+                        reader.onloadend = function(e){
+                            if(vm.dataArray != null && vm.dataArray['board'].length > 0) {
+                                vm.listOk = true;
+                                console.log('listOk')
+                            } else {
+                                vm.listOk = false;
+                            }
+                        }
+                    }
+                },
+                boardList: function(){
+                    this.readOk = false;
+                    this.writeOk = false;
+                    this.listOk = true;
+                },
+                boardWrite: function(){
+                    this.readOk = false
+                    this.writeOk = true;
+                    this.listOk = false;
+                },
+                boardRead: function(info){
+                    this.readOk = true;
+                    this.listOk = false;
+                    this.boardInfo = info;
+                    for(var i = 0; i < this.dataArray['board'].length; i++){
+                        if(this.dataArray['board'][i].no == info.no){
+                            this.dataArray['board'][i].view = parseInt(this.dataArray['board'][i].view) + 1;
+                        }
+                    }
+                },
+                boardSave: function(title, content){
+                    var no = 1;
+                    if(this.dataArray['board'].length != 0){
+                        no = parseInt(this.dataArray['board'][this.dataArray['board'].length -1].no) +1
+                        var board_info = {
+                            no: no,
+                            title: title,
+                            content: content,
+                            view: "1"
+                        }
+                    }
+
+                    this.dataArray['board'].push(board_info);
+                    this.writeOk = false;
+                    this.readOk = false;
+                    this.listOk = true;
+                },
+                boardDelete: function(no) {
+                    for(var i = 0; i < this.dataArray['board'].length; i++){
+                        if(this.dataArray['board'][i].no == no){
+                            this.dataArray['board'].splice(i, 1)
+                        }
+                    }
+                },
+                saveBoardList: function(){
+                    var data = this.dataArray;
+
+                    if(data.length == 0){
+                        alert('no data for saving')
+                        return
+                    }
+                    var filename = 'board.json'
+
+                    if(typeof data === "object"){
+                        data = JSON.stringify(data, undefined, 4)
+                    }
+
+                    var blob = new Blob([data], {type: 'text/json'}),
+                    e = document.createEvent('MouseEvents'),
+                    a = document.createElement('a');
+
+                    a.download = filename;
+                    a.href = window.URL.createObjectURL(blob)
+                    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+                    e.initMouseEvent('click', true, false, window, 0,0,0,0,0,false,false,false,false,0,null);
+                    a.dispatchEvent(e)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
