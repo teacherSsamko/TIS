@@ -1,37 +1,32 @@
-from moviepy.editor import *
-
-videoclip = VideoFileClip("/Users/ssamko/Downloads/_FNTQ9QM1.avi")
-
 import cv2
 import os
 
-# cam = cv2.VideoCapture("/Users/ssamko/Downloads/_FNTQ9QM1.avi")
-cam = cv2.VideoCapture("https://storage.googleapis.com/gdf-web-storage/video/develop/fTZtbpAU17.avi")
+def thumbnail_generator(video_path, filename):
 
-try: 
-      
-    # creating a folder named data 
-    if not os.path.exists('data'): 
-        os.makedirs('data') 
-  
-# if not created then raise error 
-except OSError: 
-    print ('Error: Creating directory of data') 
+    cam = cv2.VideoCapture(video_path)
 
-current_frame = 0
+    try:       
+        # creating a folder named data 
+        if not os.path.exists('/tmp/thumbnail'): 
+            os.makedirs('/tmp/thumbnail') 
+    
+    # if not created then raise error 
+    except OSError: 
+        print ('Error: Creating directory of data') 
 
-while(True):
-    ret, frame = cam.read()
+    current_frame = 0
 
-    if ret:
-        name = './data/frame' + str(current_frame) + '.jpg'
-        print('creating',ret)
-        cv2.imwrite(name, frame)
-        current_frame += 1
-        break
+    while(True):
+        ret, frame = cam.read()
 
-    else:
-        break
-
-cam.release()
-cv2.destroyAllWindows()
+        if ret:
+            name = '/tmp/thumbnail/'+filename+'.jpg'
+            print('creating')
+            cv2.imwrite(name, frame)
+            # current_frame += 1
+            break
+        else:
+            break
+    print('thumbnail finish')
+    cam.release()
+    cv2.destroyAllWindows()
