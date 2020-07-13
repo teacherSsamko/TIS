@@ -31,3 +31,6 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 systemctl start {name}.service
 
+## 종료 cmd
+
+
