@@ -1,3 +1,8 @@
+# gunicorn 설치
+```
+pip install gunicorn
+```
+
 # gunicorn 실행
 
 >gunicorn.service   
