@@ -1,0 +1,66 @@
+upstream socket_nodes {
+        # added option for load balancing
+        ip_hash;
+
+	server {내부ip}:3000;
+	keepalive 512;
+}
+upstream socket_nodes_io {
+	ip_hash;
+	server {내부ip}}:3000;
+	keepalive 512;
+}
+
+
+server {
+	server_name test-socket.pikavue.com;
+
+	location / {
+                proxy_pass http://socket_nodes;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+
+		proxy_buffering   off;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header Upgrade websocket;
+
+		keepalive_timeout 	620s;
+		proxy_connect_timeout                   30s;
+        proxy_send_timeout                      30s;
+        proxy_read_timeout                      30s;
+		send_timeout 7d;
+        access_log /var/log/nginx/access_1.log;
+        error_log /var/log/nginx/error_1.log;
+        }
+	#socket.io.js파일 전용.
+	location ~* \.io {
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+		proxy_set_header Upgrade $http_upgrade;
+	    	proxy_set_header Connection 'upgrade';
+		proxy_set_header Host $host;
+
+		keepalive_timeout 	620s;
+		proxy_connect_timeout   620s;
+            	proxy_send_timeout      620s;
+            	proxy_read_timeout      620s;
+		send_timeout		60s;
+	        access_log /var/log/nginx/access_socketio.log;
+	        error_log /var/log/nginx/error_socketio.log;
+
+		proxy_pass http://socket_nodes_io;
+
+
+		proxy_http_version 1.1;
+		proxy_redirect off;
+
+		proxy_buffers 8 32k;
+		proxy_buffer_size 64k;
+
+	}
+
+}
