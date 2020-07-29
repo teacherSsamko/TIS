@@ -3,7 +3,7 @@ import os
 from google.cloud import storage
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=os.path.join(BASE_DIR,"private/gdf-service-f0c823f4a436.json")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=os.path.join(BASE_DIR,"private/KEY.json")
 
 def upload_upscaled_to_gcs(upscaled_file_path, origin_file_name):
     client = storage.Client()
