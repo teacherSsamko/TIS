@@ -8,6 +8,8 @@ import datetime
 import json
 import time
 import random
+from multiprocessing import Queue, Process
+
 
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -22,32 +24,30 @@ class Director:
     3) timeout된 worker 강제 소멸
     4) gcs업로드(worker가 할 지 고민)
     """
-    
+    tasks_that_are_done = Queue()
+    tasks_to_accomplish = Queue()
+    accomplish_set = set()
+    done_set = set()
     workers = []
-    max_worker_count = os.cpu_count()*2-1
 
-    def __init__(self, max_worker_count=None):
-        """
-        @type max_worker_count: int
-        """
-        if max_worker_count:
-            self.max_worker_count = max_worker_count
 
+    def __init__(self):
+        pass
     
     async def work(self):
-        """
-        반복해서 할 routine 작성
-        """
         while True:
-            if len(self.workers) < self.max_worker_count:
+            if len(self.workers) < 4:
                 task = asyncio.create_task(self.assign_worker())
             await asyncio.sleep(1)
-            print('Current working workers => ', len(self.workers))
+            print('len of workers => ', len(self.workers))
             task2 = asyncio.create_task(self.check_worker())
 
     async def assign_worker(self):
         print('assign worker')
+        condition = random.randint(1,2)
+    
         # assign worker here
+        # worker = asyncio.ensure_future(self.assign_img_worker())
         task= asyncio.create_task(self.assign_img_worker())
         await task
         print('worker assigned')
@@ -76,39 +76,46 @@ class Director:
         await asyncio.sleep(1)
             
 
-class WorkerBase:
+class UpscalerBase:
     """
     base class
     """
+    
     worker_count = 0
+
+    async def __aenter__(self):
+        print('async enter')
+
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        print('async exit')
 
     def __init__(self):
         # start_dt for checking timeout
         self.work_done = False
         self.is_working = False
         self.timelimit = datetime.timedelta(seconds=5)
-        WorkerBase.worker_count += 1
-        self.idx = WorkerBase.worker_count
+        UpscalerBase.worker_count += 1
+        self.idx = UpscalerBase.worker_count
         self.start_dt = datetime.datetime.now()
         print('worker init at', self.start_dt)
         # new task with start_dt
 
     def get_status(self):
-        """
-        director가 worker의 상태를 점검하는 method
-        완료 혹은 timeout 판별 
-        True: work is finished or timeout
-        False: in Processing
-        """
-        if self.work_done:
-            print(f'worker_{self.idx} => job finished')
-            return True
-        elif (datetime.datetime.now() - self.start_dt) < self.timelimit:
-            return False
-        else:
-            print(f'worker_{self.idx} => timeout')
-            self.work_done = True
-            return True
+            """
+            director가 worker의 상태를 점검하는 method
+            완료 혹은 timeout 판별 
+            True: work is finished whatever it upscaled well or not
+            False: in Processing
+            """
+            if self.work_done:
+                print(f'worker_{self.idx} => job finished')
+                return True
+            elif (datetime.datetime.now() - self.start_dt) < self.timelimit:
+                return False
+            else:
+                print(f'worker_{self.idx} => timeout')
+                self.work_done = True
+                return True
     
     def set_timelimit(self, minutes):
         """
@@ -121,13 +128,17 @@ class WorkerBase:
 
 
 
-class ImgUpscaler(WorkerBase):
+class ImgUpscaler(UpscalerBase):
     """
-    Director로 부터 작업을 할당받아 
+    Director로 부터 queue에 있는 Image 작업을 할당받아 
     업스케일링 진행
     """
+    def __init__(self):
+        super().__init__()
+
+
+
     async def do_job(self):
-        
         self.is_working = True
         i = 0
         size = random.randint(1, 100)
@@ -143,18 +154,26 @@ class ImgUpscaler(WorkerBase):
 
     
 
-class VidUpscaler(WorkerBase):
+class VidUpscaler(UpscalerBase):
     """
     Director로 부터 queue에 있는 Video 작업을 할당받아 
     업스케일링 진행
     """
-    
+    def __init__(self, task, gpu_avail):
+        super().__init__(task, gpu_avail)
     
 
 
+"""
+4개의 프로세스가 동시에 작동하도록
+Director
+Worker * 3
+"""
+
+director = Director()
+
+lcpu = os.cpu_count()*2-1
 async def main():
-    director = Director()
-    lcpu = os.cpu_count()*2-1
     print('CPU=>',lcpu)
     
     task1 = asyncio.create_task(director.work())
@@ -164,4 +183,4 @@ async def main():
 try:
     asyncio.run(main())
 except KeyboardInterrupt:
-    print('finish')
+        print('finish')
