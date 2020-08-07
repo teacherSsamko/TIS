@@ -45,17 +45,13 @@ class Director:
     async def assign_worker(self):
         print('assign worker')
         condition = random.randint(1,2)
-        if condition != 1:
-            print('condition =>', condition)
-            print('sleep 1 sec')
-            await asyncio.sleep(1)
-        else:
-            # assign worker here
-            # worker = asyncio.ensure_future(self.assign_img_worker())
-            task= asyncio.create_task(self.assign_img_worker())
-            await task
-            print('worker assigned')
-            # self.workers.append(worker)
+    
+        # assign worker here
+        # worker = asyncio.ensure_future(self.assign_img_worker())
+        task= asyncio.create_task(self.assign_img_worker())
+        await task
+        print('worker assigned')
+        # self.workers.append(worker)
     
     async def assign_img_worker(self):
         worker = ImgUpscaler()
@@ -68,8 +64,10 @@ class Director:
         for worker in self.workers:
             if not worker.is_working:
                 task = asyncio.create_task(worker.do_job()) # 이걸 task
+                print(f'worker {worker.idx} start work')
             if worker.get_status():
-                print(f'worker {i} out')
+                print(f'worker {worker.idx} out')
+                del worker
                 poplist.insert(0, i)
             i += 1
         for popindex in poplist:
@@ -82,9 +80,8 @@ class UpscalerBase:
     """
     base class
     """
-    work_done = False
-    is_working = False
-    timelimit = datetime.timedelta(seconds=5)
+    
+    worker_count = 0
 
     async def __aenter__(self):
         print('async enter')
@@ -94,6 +91,11 @@ class UpscalerBase:
 
     def __init__(self):
         # start_dt for checking timeout
+        self.work_done = False
+        self.is_working = False
+        self.timelimit = datetime.timedelta(seconds=5)
+        UpscalerBase.worker_count += 1
+        self.idx = UpscalerBase.worker_count
         self.start_dt = datetime.datetime.now()
         print('worker init at', self.start_dt)
         # new task with start_dt
@@ -106,10 +108,13 @@ class UpscalerBase:
             False: in Processing
             """
             if self.work_done:
+                print(f'worker_{self.idx} => job finished')
                 return True
             elif (datetime.datetime.now() - self.start_dt) < self.timelimit:
                 return False
             else:
+                print(f'worker_{self.idx} => timeout')
+                self.work_done = True
                 return True
     
     def set_timelimit(self, minutes):
@@ -131,15 +136,20 @@ class ImgUpscaler(UpscalerBase):
     def __init__(self):
         super().__init__()
 
+
+
     async def do_job(self):
+        self.is_working = True
         i = 0
-        size = random.randint(1, 10)
-        print('job start >',size)
-        while i < size:
-            print(i)
+        size = random.randint(1, 100)
+        print(f'{self.idx} job start >',size)
+        while i < size and not self.work_done:
+            # if i % 10 == 0:
+            print(f'worker_{self.idx} => ',i)
             await asyncio.sleep(1)
             i += 1
         print('job done')
+        self.work_done = True
 
 
     
@@ -165,9 +175,12 @@ director = Director()
 lcpu = os.cpu_count()*2-1
 async def main():
     print('CPU=>',lcpu)
+    
     task1 = asyncio.create_task(director.work())
 
     await task1
-    print('finish')
-
-asyncio.run(main())
+    
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+        print('finish')
