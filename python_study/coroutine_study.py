@@ -11,9 +11,20 @@ async def count_up(count):
         print(i+1)
         await asyncio.sleep(0.7)
 
+class Worker:
+    def __init__(self):
+        pass
+
+    async def count_up(self, count):
+        for i in range(count):
+            print('worker',i+1)
+            await asyncio.sleep(0.7)
+
 async def main():
+    worker = Worker()
     task1 = asyncio.create_task(say_after(3, 'hello'))
-    task3 = asyncio.create_task(count_up(10))
+    # task3 = asyncio.create_task(count_up(10))
+    task5 = asyncio.create_task(worker.count_up(5))
     task2 = asyncio.create_task(say_after(1, 'world'))
     task4 = asyncio.create_task(count_up(4))
 
