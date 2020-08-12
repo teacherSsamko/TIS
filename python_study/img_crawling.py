@@ -11,6 +11,7 @@ if not os.path.exists(f'./images'):
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 """
+2020.8.12. 11:58
 http://www.ssg.com/robots.txt
 
 User-agent: *
@@ -47,11 +48,4 @@ with open(f"./images/{ctgId}/url_list.txt", 'w') as f:
             print(f'{i+1} =>', url)
             i += 1
             f.write(f'{url}\n')
-            # if a_tag is not None:
-            #     price = stock.select_one('td:nth-child(3)').text
-            #     name = a_tag.text
-            #     row = {
-            #         'name': name,
-            #         'price': price
-            #     }
-            #     print(name, price)
+            
