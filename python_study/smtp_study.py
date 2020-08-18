@@ -1,43 +1,34 @@
+import os
+import sys
 import smtplib
 from email.mime.text import MIMEText
 
-def sendMail(me, you, msg):
-    smtp = smtplib.SMTP('smtp.pikavue.com', 7409)
-    smtp.login("hello@smtp.pikavue.com", 'gdfnas!@#')
-    msg = MIMEText(msg)
-    msg['Subject'] = 'TEST'
-    smtp.sendmail(me, you, msg.as_string())
-    smtp.quit()
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+import private.config
 
-# sendMail('hello@smtp.pikavue.com', 'ssamko@gdflab.com', 'TEXT')
-try:
-    smtp = smtplib.SMTP('smtp.pikavue.com', 7409)
-    smtp.ehlo()
-    smtp.starttls()
-    smtp.login("hello@smtp.pikavue.com","gdfnas!@#")
+kakao = private.config.KAKAO_SMTP
 
-    msg = MIMEText('hello pikavue')
-    msg['Subject'] = 'Test'
-    msg['To'] = 'ssamko@kakao.com'
-    smtp.sendmail('hello@smtp.pikavue.com', 'ssamko@kakao.com', msg.as_string())
 
-    smtp.quit()
-except:
-    print("Error")
+smtp = smtplib.SMTP_SSL(host=kakao['host'], port=kakao['port'])
 
-'''
-"smtp": {
-        "service": "pikavue",
-        "secureConnection": true,
-        "host": "smtp.pikavue.com",
-        "port": 7409,
-        "secure": false,
-        "auth": {
-            "user": "hello@smtp.pikavue.com",
-            "pass": "gdfnas!@#"
-        },
-        "tls":{
-            "rejectUnauthorized": false
-        }
-    }
-'''
+smtp.login(kakao['id'],kakao['password'])
+
+msg = MIMEText('hello pikavue')
+msg['Subject'] = 'Test'
+msg['To'] = 'ssamko@gdflab.com'
+msg['From'] = kakao['mail']
+smtp.sendmail(from_addr=kakao['mail'], to_addrs='ssamko@gdflab.com', msg=msg.as_string())
+
+
+smtp.quit()
+print("mail sent")
+
+"""
+KAKAO_SMTP = {
+    "id":'id',
+    "mail":"id@kakao.com",
+    "password":"password",
+    "host":"smtp.kakao.com",
+    "port":465
+}
+"""
