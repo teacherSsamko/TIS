@@ -45,7 +45,7 @@ col = db['hmall_prod']
 today = datetime.date.today()
 
 with open(f'crawler/hmall/daily/{today}.txt','r') as f:
-    urls = f.readlines()
+    urls = f.readlines()[18:]
 
 for url in urls:
     prod_id = url.split("=")[1].split("&")[0]
@@ -64,7 +64,7 @@ for url in urls:
     url_prefix = "/".join(url_prefix)
     print(url_prefix)
     with open(f'crawler/hmall/videos/{prod_id}/playlist.m3u8','r') as f:
-        chunk = f.readlines()[-1]
+        chunk = f.readlines()[-1].replace('\n','')
         print(chunk)
         chunk_url = "https:/" + url_prefix + "/" + chunk
         # print(chunk_url)
@@ -73,8 +73,11 @@ for url in urls:
         lines = f.readlines()
         for line in lines:
             if ".ts" in line:
+                line = line.replace('\n','')
+                print(line)
                 ts_url = "https:/" + url_prefix + "/" + line
                 urllib.request.urlretrieve(ts_url, f'crawler/hmall/videos/{prod_id}/{line}')
+
 
     # merge files with ffmpeg
     # in_file = ffmpeg.input(f'crawler/hmall/videos/{prod_id}/{chunk}')
