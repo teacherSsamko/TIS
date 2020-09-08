@@ -35,16 +35,20 @@ updateProgress: (hashKey, progress, nowProcessing) => {
 
 def insert_request_info(hashkey, user_id, request_id, filename, routingkey):
     data = {
-        'user_id':user_id,
-        'request_id':request_id,
+        'userId':user_id,
+        'requestId':request_id,
         'filename':filename,
-        'routingkey':routingkey
+        'routingKey':routingkey
     }
     r.hset(hashkey, mapping=data)
     r.expire(hashkey, datetime.timedelta(days=5))
 
-def update_progress(hashkey, progress):
-    r.hset(hashkey, mapping={'progress':progress})
+def update_progress(hashkey, progress, nowProcessing):
+    data = {
+        'progress':progress,
+        'nowProcessing':nowProcessing
+    }
+    r.hset(hashkey, mapping=data)
 
 insert_request_info('ssamko', 'ssamko', '17', 'kobra', '360')
 update_progress('ssamko', 70)
