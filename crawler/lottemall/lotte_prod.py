@@ -29,6 +29,6 @@ with open(f'crawler/lottemall/daily/{today}.txt','w') as f:
         print(prod_id)
         f.write(f'{prod_id}\n')
 
-driver.execute_script("fn_goodsCheckAdult({goods_no:12640323 , infw_disp_no_sct_cd:'40' , infw_disp_no:0 , conr_no:0 , select_goods_no:0 , cart_sn:'' , target:'', action:'OneAndOne', byr_age_lmt_cd:0 , login_yn:'N' , mbr_age:0 , allViewYn:'N'} , 'llog=O1006_2');")
+# driver.execute_script("fn_goodsCheckAdult({goods_no:12640323 , infw_disp_no_sct_cd:'40' , infw_disp_no:0 , conr_no:0 , select_goods_no:0 , cart_sn:'' , target:'', action:'OneAndOne', byr_age_lmt_cd:0 , login_yn:'N' , mbr_age:0 , allViewYn:'N'} , 'llog=O1006_2');")
 
-# driver.quit()
+driver.quit()
