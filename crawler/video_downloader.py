@@ -8,7 +8,7 @@ import requests
 
 mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
-col = db['lotte_prod']
+col = db['w_prod']
 
 prod_list = list(col.find())
 
@@ -29,7 +29,7 @@ for prod in prod_list:
         continue
     print(f'start download {current_no} / {total_count}')
     # urllib.request.urlretrieve(video_url, f"crawler/lottemall/videos/{prod_id}.mp4")
-    file_name = f"crawler/lottemall/videos/{prod_id}.mp4"
+    file_name = f"crawler/w/videos/{prod_id}.mp4"
     with open(file_name, "wb") as f:
         response = requests.get(video_url, stream=True)
         total_length = response.headers.get('content-length')
