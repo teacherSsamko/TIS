@@ -21,7 +21,7 @@ driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloa
 today = datetime.date.today()
 
 with open('crawler/gs/url_list.txt','r') as f:
-    prods = f.readlines()[93:]
+    prods = f.readlines()[144:]
 
 total_count = len(prods)
 current = 1
