@@ -20,7 +20,7 @@ driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloa
 url_prefix = "http://www.skstoa.com/display/goods/"
 
 with open('crawler/sk/prod_id_list.txt','r') as f:
-    prod_ids = f.readlines()[388:]
+    prod_ids = f.readlines()[1207:]
 
 for prod_id in prod_ids:
     prod_id = prod_id.replace("\n","")
