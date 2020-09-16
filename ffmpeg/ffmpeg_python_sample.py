@@ -1,35 +1,45 @@
 import os
-import subprocess
 
 import ffmpeg
 
-video_dir_path = 'crawler/hmall/videos/src'
-dir_list = [x for x in os.listdir(video_dir_path) if '.' not in x]
+video_dir_path = 'crawler/ssg/videos'
+vod_list = [x for x in os.listdir(video_dir_path) if x.endswith('.mp4')]
 
-for directory in dir_list:
-    prod_id = directory
-    files = os.listdir(f'{video_dir_path}/{directory}')
-    print(files)
-    for f in files:
-        if 'chunklist' in f:
-            chunk = f
-    print(chunk)
-    target_path = os.path.join(f'{video_dir_path}/{directory}', f'{prod_id}.mp4')
-    print(target_path)
-    # in_file = ffmpeg.input(f'crawler/hmall/videos/{prod_id}/{chunk}')
-    # (
-    #     ffmpeg
-    #     .input(in_file)
-        
-    #     # .output(f'crawler/hmall/videos/{prod_id}/{prod_id}.mp4', c='copy', bsf='a acc_adtstoasc')
-    #     .output(target_path, c='copy', bsf='a aac_adtstoasc')
-    #     .run()
-    # )
-    # ffmpeg -i {m3u8} -bsf:a aac_adtstoasc -c copy {target_path}
+audio_path = os.path.join(video_dir_path,'audio')
 
-    # result = subprocess.Popen(['ffmpeg', '-i', f'crawler/hmall/videos/{prod_id}/{chunk}', '-bsf:a', 'acc_adtstoasc', '-c', 'copy', f'crawler/hmall/videos/{prod_id}/{prod_id}.mp4'])
-    cmd = f'ffmpeg -i crawler/hmall/videos/src/{prod_id}/{chunk} -bsf:a aac_adtstoasc -c copy crawler/hmall/videos/{prod_id}.mp4'
-    result = os.system(cmd)
-    print(result)
+if not os.path.exists(audio_path):
+    os.mkdir(audio_path)
+
+# vod = vod_list[1]
+# vod = os.path.join(video_dir_path, vod)
+vod = 'crawler/ssg/videos/1000032803536.mp4'
+print(vod)
+filename = vod.split("/")[-1].split(".")[0]
+filename = os.path.join(audio_path, filename)
+print(filename)
+# cmd = f'ffmpeg -i {vod} -c:a aac -ab 192000 -vn {filename}.m4a'
+cmd = f'ffmpeg -i {vod} {filename}.wav'
+# ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3
+result = os.system(cmd)
+
+cmd = f'base64 {filename}.wav > {filename}.txt'
+result = os.system(cmd)
+print(result)
+
+# for vod in vod_list:
+#     vod = os.path.join(video_dir_path, vod)
+#     print(vod)
+#     filename = vod.split("/")[-1].split(".")[0]
+#     filename = os.path.join(audio_path, filename)
+#     print(filename)
+#     # cmd = f'ffmpeg -i {vod} -c:a aac -ab 192000 -vn {filename}.m4a'
+#     cmd = f'ffmpeg -i {vod} {filename}.wav'
+#     # ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3
+#     result = os.system(cmd)
+
+#     cmd = f'base64 {filename}.wav > {filename}.txt'
+#     result = os.system(cmd)
+#     print(result)
+#     break
         
 
