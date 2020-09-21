@@ -21,7 +21,7 @@ driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloa
 today = datetime.date.today()
 
 with open('crawler/gong/prod_id_list.txt','r') as f:
-    prods = f.readlines()[417:]
+    prods = f.readlines()[719:]
 
 url_prefix = "https://www.gongyoungshop.kr/goods/selectGoodsDetail.do?prdId="
 
