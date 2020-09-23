@@ -1,9 +1,11 @@
 import os
 import subprocess
+import datetime
 
 import ffmpeg
 
-video_dir_path = 'crawler/hmall/videos/src'
+today = datetime.date.today()
+video_dir_path = f'crawler/hmall/videos/src/{today}'
 dir_list = [x for x in os.listdir(video_dir_path) if '.' not in x]
 
 for directory in dir_list:
@@ -28,7 +30,7 @@ for directory in dir_list:
     # ffmpeg -i {m3u8} -bsf:a aac_adtstoasc -c copy {target_path}
 
     # result = subprocess.Popen(['ffmpeg', '-i', f'crawler/hmall/videos/{prod_id}/{chunk}', '-bsf:a', 'acc_adtstoasc', '-c', 'copy', f'crawler/hmall/videos/{prod_id}/{prod_id}.mp4'])
-    cmd = f'ffmpeg -i crawler/hmall/videos/src/{prod_id}/{chunk} -bsf:a aac_adtstoasc -c copy crawler/hmall/videos/{prod_id}.mp4'
+    cmd = f'ffmpeg -i {video_dir_path}/{prod_id}/{chunk} -bsf:a aac_adtstoasc -c copy crawler/hmall/videos/{prod_id}.mp4'
     result = os.system(cmd)
     print(result)
         

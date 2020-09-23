@@ -24,6 +24,8 @@ url = "http://display.cjmall.com/p/homeTab/main?hmtabMenuId=002409&broadType=plu
 if not os.path.exists(f"crawler/cj/daily/{today}"):
     os.mkdir(f'crawler/cj/daily/{today}')
 
+urls = set()
+
 with open(f"crawler/cj/daily/{today}/url_list.txt", 'w') as f:
     
     driver.get(url)
@@ -32,8 +34,10 @@ with open(f"crawler/cj/daily/{today}/url_list.txt", 'w') as f:
     for item in items:
         page_url = item.get_attribute('href')
         print(page_url)
+        urls.add(page_url)
+
+    for url in urls:
         f.write(f'{page_url}\n')
-        
 
 
 

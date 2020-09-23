@@ -43,40 +43,43 @@ col = db['hmall_prod']
 # prod_list = list(col.find())
 
 today = datetime.date.today()
+video_src_dir = f'crawler/hmall/videos/src/{today}'
 
 with open(f'crawler/hmall/daily/{today}.txt','r') as f:
-    urls = f.readlines()[:18]
+    urls = f.readlines()
 
 for url in urls:
     prod_id = url.split("=")[1].split("&")[0]
-    if not os.path.exists(f'crawler/hmall/videos/src/{prod_id}'):
-        os.makedirs(f'crawler/hmall/videos/src/{prod_id}')
+    if not os.path.exists(f'{video_src_dir}/{prod_id}'):
+        os.makedirs(f'{video_src_dir}/{prod_id}')
 
     # data = requests.get(url)
     driver.get(url)
     # soup = BeautifulSoup(data.text, 'html.parser')
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    playlist = soup.select_one('video.vjs-tech > source')['src']
+    try:
+        playlist = soup.select_one('video.vjs-tech > source')['src']
+    except:
+        continue
     print(playlist)
-    urllib.request.urlretrieve(playlist, f'crawler/hmall/videos/src/{prod_id}/playlist.m3u8')
+    urllib.request.urlretrieve(playlist, f'{video_src_dir}/{prod_id}/playlist.m3u8')
     url_prefix = playlist.split("/")[1:-1]
     url_prefix = "/".join(url_prefix)
     print(url_prefix)
-    with open(f'crawler/hmall/videos/src/{prod_id}/playlist.m3u8','r') as f:
+    with open(f'{video_src_dir}/{prod_id}/playlist.m3u8','r') as f:
         chunk = f.readlines()[-1].replace('\n','')
         print(chunk)
         chunk_url = "https:/" + url_prefix + "/" + chunk
         # print(chunk_url)
-    urllib.request.urlretrieve(chunk_url, f'crawler/hmall/videos/src/{prod_id}/{chunk}')
-    with open(f'crawler/hmall/videos/src/{prod_id}/{chunk}','r') as f:
+    urllib.request.urlretrieve(chunk_url, f'{video_src_dir}/{prod_id}/{chunk}')
+    with open(f'{video_src_dir}/{prod_id}/{chunk}','r') as f:
         lines = f.readlines()
         for line in lines:
             if ".ts" in line:
                 line = line.replace('\n','')
                 print(line)
                 ts_url = "https:/" + url_prefix + "/" + line
-                urllib.request.urlretrieve(ts_url, f'crawler/hmall/videos/src/{prod_id}/{line}')
+                urllib.request.urlretrieve(ts_url, f'{video_src_dir}/{prod_id}/{line}')
 
 
     # merge files with ffmpeg

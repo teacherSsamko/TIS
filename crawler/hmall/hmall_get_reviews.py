@@ -75,7 +75,7 @@ def  get_review(driver, review_id):
     return review_id
 
 with open(f'crawler/hmall/daily/{today}.txt','r') as f:
-    urls = f.readlines()[1:]
+    urls = f.readlines()
     
     for idx, url in enumerate(urls):
         review_id = 0

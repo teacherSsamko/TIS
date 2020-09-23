@@ -52,7 +52,8 @@ for prod_id in prod_ids:
         'score': None,
         'score_persons': 0,
         'img_url':img_url,
-        'video_url':video_url
+        'video_url':video_url,
+        'reg_date':today
     }
     print(f"{current} / {total_count}")
     current += 1

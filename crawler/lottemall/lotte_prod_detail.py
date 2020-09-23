@@ -40,7 +40,8 @@ with open(f'crawler/lottemall/daily/{today}_details.txt', 'r') as f:
             'score': None,
             'score_persons': 0,
             'img_url':img_url,
-            'video_url':video_url
+            'video_url':video_url,
+            'reg_date':today
         }
         print(prod_id)
         print(prod_name)

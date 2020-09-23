@@ -21,7 +21,7 @@ col = db['hmall_prod']
 today = datetime.date.today()
 
 with open(f'crawler/hmall/daily/{today}.txt','r') as f:
-    urls = f.readlines()[20:]
+    urls = f.readlines()
     for url in urls:
         print(url)
         data = requests.get(url)
@@ -54,7 +54,8 @@ with open(f'crawler/hmall/daily/{today}.txt','r') as f:
             'price': price,
             'score': score,
             'score_persons':score_persons,
-            'img_url':img_url
+            'img_url':img_url,
+            'reg_date':today
         }
         col.insert_one(db_data)
         # time.sleep(2)

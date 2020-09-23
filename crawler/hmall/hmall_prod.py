@@ -24,11 +24,16 @@ prod_items = driver.find_elements_by_css_selector('#cateItemListIn > div.pl_item
 
 today = datetime.date.today()
 
+urls = set()
+
 with open(f'crawler/hmall/daily/{today}.txt','w') as f:
     for prod in prod_items:
         item_url = prod.get_attribute('href')
         # item_url = prod.find_element_by_css_selector('a').get_attribute('href')
         print(item_url)
-        f.write(f'{item_url}\n')
+        urls.add(item_url)
+
+    for url in urls:
+        f.write(f'{url}\n')
 
 driver.quit()

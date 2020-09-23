@@ -29,10 +29,15 @@ titles = driver.find_elements_by_css_selector('#onairShow > div.schedule_right >
 #     video_url = driver.find_elements_by_css_selector('video#video').get_attribute('src')
 #     driver.find_elements_by_css_selector('#layerPopupVodVideo > section > a').click()
 
+ids = set()
+
 with open(f'crawler/w/daily/{today}.txt','w') as f:
     for title in titles:
         prod_id = title.get_attribute('onclick').split("/")[-1].split("'")[0]
         print(prod_id)
+        ids.add(prod_id)
+
+    for prod_id in ids:
         f.write(f'{prod_id}\n')
 
 driver.quit()
