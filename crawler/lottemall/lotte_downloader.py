@@ -14,6 +14,8 @@ today = datetime.date.today()
 prod_list = list(col.find({"reg_date":today}))
 
 video_dir = f"crawler/lotte/videos/{today}"
+if not os.path.exists(video_dir):
+    os.mkdir(video_dir)
 
 # with open(f"crawler/ssg/videos/{directory}/url_list.txt", 'r') as f:
 #     urls = f.readlines()
@@ -33,8 +35,7 @@ for prod in prod_list:
     print(f'start download {current_no} / {total_count}')
     # urllib.request.urlretrieve(video_url, f"crawler/lottemall/videos/{prod_id}.mp4")
 
-    if not os.path.exists(video_dir):
-        os.mkdir(video_dir)
+    
 
     file_name = f"{video_dir}/{prod_id}.mp4"
     with open(file_name, "wb") as f:

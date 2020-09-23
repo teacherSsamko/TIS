@@ -10,9 +10,9 @@ mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
 col = db['hmall_prod']
 
-prod_list = list(col.find())
 
 today = datetime.date.today()
+prod_list = list(col.find({"reg_date":today}))
 
 if not os.path.exists(os.path.join(BASE_DIR, 'images')):
     os.mkdir(os.path.join(BASE_DIR, 'images'))
