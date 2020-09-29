@@ -53,7 +53,7 @@ for prod_id in prod_ids:
         'score_persons': 0,
         'img_url':img_url,
         'video_url':video_url,
-        'reg_date':today
+        'reg_date':str(today)
     }
     print(f"{current} / {total_count}")
     current += 1

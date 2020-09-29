@@ -10,12 +10,12 @@ db = mongo['aircode']
 col = db['w_prod']
 
 today = datetime.date.today()
-prod_list = list(col.find({"reg_date":today}))
+prod_list = list(col.find({"reg_date":str(today)}))
 
 
 if not os.path.exists(f'crawler/w/images/{today}'):
     os.mkdir(f'crawler/w/images/{today}')
 
-for prod in prods:
+for prod in prod_list:
     url = prod['img_url']
     urllib.request.urlretrieve(url, f"crawler/w/images/{today}/{prod['prod_id']}.jpg")

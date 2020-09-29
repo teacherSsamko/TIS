@@ -12,7 +12,7 @@ db = mongo['aircode']
 col = db['w_prod']
 
 today = datetime.date.today()
-prod_list = list(col.find({"reg_date":today}))
+prod_list = list(col.find({"reg_date":str(today)}))
 
 video_dir = f"crawler/w/videos/{today}"
 if not os.path.exists(video_dir):
