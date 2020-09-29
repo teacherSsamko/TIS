@@ -29,13 +29,16 @@ with open(f'crawler/hmall/daily/{today}.txt','r') as f:
         
         # with open('crawler/hmall/page_sample.txt','w') as sample:
         #     sample.write(data.text)
-        prod_id = soup.select_one('div.pdtCode > span:nth-child(1)').text.split(":")[-1].strip()
-        prod_id = int(prod_id)
-        print(prod_id)
-        prod_name = soup.select_one('h3.pdtTitle').text.strip()
-        print(prod_name)
-        price = soup.select_one('p.finalPrice.number.hasDC > strong').text.strip()
-        print(price)
+        try:
+            prod_id = soup.select_one('div.pdtCode > span:nth-child(1)').text.split(":")[-1].strip()
+            prod_id = int(prod_id)
+            print(prod_id)
+            prod_name = soup.select_one('h3.pdtTitle').text.strip()
+            print(prod_name)
+            price = soup.select_one('p.finalPrice.number.hasDC > strong').text.strip()
+            print(price)
+        except:
+            continue
         try:
             score = soup.select_one('em.scoreMount').text.strip()
             print(score)
@@ -55,7 +58,7 @@ with open(f'crawler/hmall/daily/{today}.txt','r') as f:
             'score': score,
             'score_persons':score_persons,
             'img_url':img_url,
-            'reg_date':today
+            'reg_date':str(today)
         }
         col.insert_one(db_data)
         # time.sleep(2)
