@@ -48,7 +48,7 @@ for url in urls:
         'score': score,
         'score_persons': score_persons,
         'img_url':img_url,
-        'reg_date':today
+        'reg_date':str(today)
     }
     print(prod_id)
     print(prod_name)

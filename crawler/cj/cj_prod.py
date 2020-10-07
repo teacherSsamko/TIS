@@ -36,7 +36,7 @@ with open(f"crawler/cj/daily/{today}/url_list.txt", 'w') as f:
         print(page_url)
         urls.add(page_url)
 
-    for url in urls:
+    for page_url in urls:
         f.write(f'{page_url}\n')
 
 
