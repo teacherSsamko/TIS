@@ -11,7 +11,7 @@ db = mongo['aircode']
 col = db['lotte_prod']
 
 today = datetime.date.today()
-prod_list = list(col.find({"reg_date":today}))
+prod_list = list(col.find({"reg_date":str(today)}))
 
 
 if not os.path.exists(os.path.join(BASE_DIR, 'images')):

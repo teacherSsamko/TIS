@@ -7,10 +7,10 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # with open(os.path.join(BASE_DIR,'purchase_history.xlsx'), 'r') as f:
 #     wb = load_workbook(f, read_only=True)
-wb = load_workbook(os.path.join(BASE_DIR,'purchase_history.xlsx'), read_only=True)
+wb = load_workbook(os.path.join(BASE_DIR,'phoneApp_order.xlsx'), read_only=True)
 
 print(wb.sheetnames[1])
-ws = wb['Sheet1']
+ws = wb['Sheet2']
 print(ws)
 print(ws.cell(row=1, column=3).value)
 # max_row = sheet.max_row - 1
@@ -26,7 +26,7 @@ with open(os.path.join(BASE_DIR,'prod_id_list.txt'), 'w') as f:
     prod_ids = []
     for row in ws.iter_rows():
         # 중복은 제거
-        prod_id = row[2].value
+        prod_id = row[3].value
         print(prod_id)
         prod_ids.append(prod_id)
 
