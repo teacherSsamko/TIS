@@ -7,7 +7,8 @@ from pymongo import MongoClient
 mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
 
-malls = ['cj','hmall','lotte','w','sk','gong','gs','nsmall','ssg']
+# malls = ['cj','hmall','lotte','w','sk','gong','gs','nsmall','ssg']
+malls = ['shopnt']
 
 for mall in malls:
     col = db[f'{mall}_prod']
