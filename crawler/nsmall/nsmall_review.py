@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,8 +13,9 @@ mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
 review_col = db['nsmall_reviews']
 prod_col = db['nsmall']
-
-prod_list = list(prod_col.find())[567:]
+today = datetime.date.today()
+prod_list = list(prod_col.find('reg_date':str(today)))
+print(len(prod_list))
 review_dataset = []
 
 options = Options()
@@ -72,7 +74,8 @@ for prod in prod_list:
                     'prod_name':prod_name,
                     'prod_review_id':review_id,
                     'score':score,
-                    'review':review.text
+                    'review':review.text,
+                    'reg_date': str(today)
                 }
                 review_dataset.append(db_data)
                 review_col.insert_one(db_data)

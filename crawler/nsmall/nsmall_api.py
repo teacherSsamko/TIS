@@ -1,4 +1,5 @@
 import os
+import datetime
 
 import requests
 from pymongo import MongoClient
@@ -17,7 +18,7 @@ parent_dom = requests.get(url='http://www.nsmall.com/NSTvThemeView?storeId=13001
 parent_soup = BeautifulSoup(parent_dom.text, 'html.parser')
 db_dataset = []
 with open('crawler/nsmall/item_list.txt','w') as f:
-    for pListId in range(2,5):
+    for pListId in range(1,5):
     # for pListId in range(1,2):
         ctg_name = parent_soup.select_one(f'#themeTempCat{pListId}').text
         f.write(f'[ {ctg_name} ]\n\n')
@@ -70,6 +71,7 @@ with open('crawler/nsmall/item_list.txt','w') as f:
                     # f.write(f'detail_img: {detail_img}\n')
                     print(f"http:{item.img['src']}")
                     f.write(f"http:{item.img['src']}\n")
+                    today = datetime.date.today()
                     # db_data['img_url'] = item.img['src']
                     f.write('\n')
                     db_data = {
@@ -79,7 +81,8 @@ with open('crawler/nsmall/item_list.txt','w') as f:
                         'prod_price':price,
                         'score':score,
                         'score_persons':score_persons,
-                        'img_url':f'http:{item.img["src"]}'
+                        'img_url':f'http:{item.img["src"]}',
+                        'reg_date':str(today)
                     }
                     db_dataset.append(db_data)
 
