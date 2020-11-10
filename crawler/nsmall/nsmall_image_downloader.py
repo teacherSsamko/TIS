@@ -29,3 +29,6 @@ def main():
         img_url = prod['img_url']
         urllib.request.urlretrieve(img_url, f"{img_dir}/{today}/{prod_id}.jpg")
         i += 1
+
+if __name__ == "__main__":
+    main()
