@@ -34,14 +34,20 @@ def next_page_search(youtube, pageToken, v_ids):
         if search_result["id"]["kind"] == "youtube#video":
         #   videos.append("%s (%s)" % (search_result["snippet"]["title"],
         #                              search_result["id"]["videoId"]))
+            vod_name = search_result["snippet"]["title"]
+            print(vod_name)
+            if 'K-Choreo 8K' not in vod_name:
+                print(search_result["snippet"]["title"])
+                return v_ids 
             v_ids.append(search_result["id"]["videoId"])
     
     print(v_ids)
     next_page = search_response.get("nextPageToken")
-    if next_page and len(v_ids) < 200:
-        return v_ids.append(next_page_search(youtube, next_page, v_ids))
-    else:
-        return v_ids
+    print(next_page)
+    if next_page:
+        v_ids.extend(next_page_search(youtube, next_page, v_ids))
+
+    return v_ids
 
 
 def youtube_search(options):
@@ -80,14 +86,20 @@ def youtube_search(options):
     #   print("Playlists:\n", "\n".join(playlists), "\n")
     next_page = search_response.get("nextPageToken")
     if next_page:
-        v_ids.append(next_page_search(youtube, next_page, v_ids))
+        v_ids.extend(next_page_search(youtube, next_page, v_ids))
 
+    print("\nfinal\n")
+    # print(v_ids)
     print("V ids:\n", "\n".join(v_ids), "\n")
     print(f"V Count: {len(v_ids)}")
+    url_prefix = 'https://www.youtube.com/watch?v='
+    with open('googleAPI_study/data/video_list.txt', 'w') as f:
+        for id in v_ids:
+            f.write(f'{url_prefix}{id}\n')
 
 
 if __name__ == "__main__":
-    argparser.add_argument("--q", help="Search term", default="[K-chreo 8k]")
+    argparser.add_argument("--q", help="Search term", default="+[K-Choreo 8K]")
     argparser.add_argument("--max-results", help="Max results", default=50)
     #   argparser.add_argument("--pageToken", help="Page Token", default="")
     args = argparser.parse_args()
