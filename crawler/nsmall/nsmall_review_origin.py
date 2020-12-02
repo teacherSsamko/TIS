@@ -1,6 +1,8 @@
 import os
 import time
 import datetime
+import sys
+import functools
 
 import requests
 from bs4 import BeautifulSoup
@@ -9,8 +11,14 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from pymongo import MongoClient
 
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import config
+
+
+conf = config.Config()
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-mongo = MongoClient("mongodb://localhost:27017")
+mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
 db = mongo['aircode']
 review_col = db['nsmall_reviews']
 prod_col = db['nsmall']
@@ -31,6 +39,16 @@ daily_index_dir = os.path.join(BASE_DIR, f'daily/{today}')
 if not os.path.exists(daily_index_dir):
     os.mkdir(daily_index_dir)
 
+def runtimer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        print(f'{func.__name__} took {round((time.time() - start), 4)} sec')
+        return func(*args, **kwargs)
+    
+    return wrapper
+
+@runtimer
 def get_last_page(driver):
     try:
         driver.find_element_by_css_selector('a.last').click()
@@ -44,6 +62,7 @@ def get_last_page(driver):
 
 index_file = os.path.join(daily_index_dir, f'{today}_index.txt')
 
+@runtimer
 def get_start_idx():
     if not os.path.exists(index_file):
         return 0
@@ -62,7 +81,7 @@ def get_start_idx():
 
         return int(last_idx)
 
-
+@runtimer
 def crawl_from(start_idx):
     with open(index_file, 'a') as f:
         f.write('\n')
@@ -132,6 +151,7 @@ while True:
         time.sleep(2)
         driver.quit()
         driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+        driver.set_window_position(-10000,0)
         start_idx = get_start_idx()
         if start_idx == -1:
             print('finish well')
