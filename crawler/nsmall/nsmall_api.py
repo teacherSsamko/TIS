@@ -1,13 +1,18 @@
 import os
+import sys
 import datetime
 
 import requests
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import config
+
 
 def main():
-    mongo = MongoClient("mongodb://localhost:27017")
+    conf = config.Config()
+    mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
     db = mongo['aircode']
     collection = db['nsmall']
 
