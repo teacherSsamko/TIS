@@ -1,5 +1,6 @@
 import os
 import time
+import sys
 import datetime
 
 import requests
@@ -9,13 +10,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from pymongo import MongoClient
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import config
 
-class review_crawler:
-    # def set_properties():
+class ReviewCrawler:
+
+    conf = config.Config()
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-    mongo = MongoClient("mongodb://localhost:27017")
+    mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
+    # mongo = MongoClient("mongodb://localhost:27017")
     db = mongo['aircode']
-    review_col = db['nsmall_reviews']
+    review_col = db['nsmall_reviews_test']
     prod_col = db['nsmall']
     today = datetime.date.today()
     prod_list = list(prod_col.find({'reg_date':str(today)}))
@@ -37,7 +42,8 @@ class review_crawler:
     index_file = os.path.join(daily_index_dir, f'{today}_index.txt')
 
     def __init__(self):
-        pass
+        self.index_file = ReviewCrawler.index_file
+        print(self.index_file)
 
 
         # return [index_file, start_idx, driver]
@@ -56,20 +62,31 @@ class review_crawler:
 
 
     def get_start_idx(self):
+        index_file = self.index_file
         if not os.path.exists(index_file):
             return 0
         with open(index_file, 'r') as f:
-            last_idx = f.readlines()[-1]
+            idxs = f.readlines()
+            last_idx = idxs[-1]
             print(f'last_idx >> {last_idx}')
             if 'ok' in last_idx:
                 return -1
+            # 두번째 실패한 건 skip
+            else:
+                before_idx = idxs[-2].strip('\n')
+                print(f'before:{before_idx}/ last:{last_idx}')
+                if before_idx == last_idx:
+                    last_idx = int(last_idx) + 1
+
             return int(last_idx)
 
-    start_idx = get_start_idx(index_file)
+    
 
     def crawl_from(self, start_idx):
-        with open(index_file, 'a') as f:
+        with open(self.index_file, 'a') as f:
             f.write('\n')
+            prod_list = self.prod_list
+            driver = self.driver
             for prod in prod_list[start_idx:]:
                 prod_idx = prod_list.index(prod)
                 print('INDEX ',prod_idx)
@@ -80,7 +97,7 @@ class review_crawler:
                 # driver = webdriver.Chrome(executable_path="/Users/ssamko/Downloads/chromedriver")
                 # url = 'http://www.nsmall.com/ProductDisplay?busChnId=INT&langId=-9&storeId=13001&partNumber=29793300&menuUri=NSItemDetailView'
                     driver.get(url)
-                    last_page = get_last_page(driver)
+                    last_page = self.get_last_page(driver)
                     
                     if last_page:
                         current_page = driver.find_element_by_xpath('//*[@id="review"]/strong')
@@ -126,16 +143,20 @@ class review_crawler:
 
 
 def main():
-    crawler = review_crawler()
+    crawler = ReviewCrawler()
     while True:
         try:
-            crawler.crawl_from(start_idx)
+            crawler.start_idx = crawler.get_start_idx()
+            crawler.crawl_from(crawler.start_idx)
             print('finish?')
             break
-        except:
+        except Exception as e:
+            print(e)
             print('timeout error: stop')
             time.sleep(2)
             crawler.driver.quit()
+            options = Options()
+            options.page_load_strategy = 'eager'
             crawler.driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
             crawler.start_idx = crawler.get_start_idx()
             if crawler.start_idx == -1:
@@ -143,5 +164,5 @@ def main():
                 break
             continue
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

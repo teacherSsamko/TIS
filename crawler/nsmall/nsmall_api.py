@@ -12,6 +12,7 @@ import config
 
 def main():
     conf = config.Config()
+    # mongo = MongoClient(f"mongodb://localhost:27017")
     mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
     db = mongo['aircode']
     collection = db['nsmall']

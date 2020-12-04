@@ -1,13 +1,18 @@
 import os
 import urllib.request
 import datetime
+import sys
 
 from pymongo import MongoClient
 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import config
+
 
 def main():
+    conf = config.Config()
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-    mongo = MongoClient("mongodb://localhost:27017")
+    mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
     db = mongo['aircode']
     # review_col = db['nsmall_reviews']
     prod_col = db['nsmall']
