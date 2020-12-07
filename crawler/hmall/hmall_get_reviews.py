@@ -8,7 +8,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from pymongo import MongoClient
 
-mongo = MongoClient("mongodb://localhost:27017")
+from ...config import Config
+
+conf = Config()
+
+mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
 db = mongo['aircode']
 col = db['hmall']
 review_col = db['hmall_reviews']
