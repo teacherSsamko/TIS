@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pymongo import MongoClient
 
 
@@ -20,11 +22,14 @@ def main():
 
     options = Options()
     options.page_load_strategy = 'eager'
-    # driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+    driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+    # print(conf.MONGO_REMOTE_IP)
 
+    # mongo = MongoClient(f"mongodb://localhost:27017")
     mongo = MongoClient(f"mongodb://{conf.MONGO_REMOTE_IP}:27017")
     db = mongo['aircode']
     col = db['hmall_prod']
+
 
     today = datetime.date.today()
 
@@ -32,37 +37,52 @@ def main():
         urls = f.readlines()
         for url in urls:
             # print(url)
-            data = requests.get(url)
-            soup = BeautifulSoup(data.text, 'html.parser')
+            # data = requests.get(url)
+            # soup = BeautifulSoup(data.text, 'html.parser')
+            driver.get(url)
+            WebDriverWait(driver, timeout=5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.pdtCode')))
             
             # with open('crawler/hmall/page_sample.txt','w') as sample:
             #     sample.write(data.text)
             try:
-                prod_id = soup.select_one('div.pdtCode > span:nth-child(1)').text.split(":")[-1].strip()
+                # prod_id = soup.select_one('div.pdtCode > span:nth-child(1)').text.split(":")[-1].strip()
+                prod_id = driver.find_element_by_css_selector('div.pdtCode > span:nth-child(1)').text.split(":")[-1].strip()
                 prod_id = int(prod_id)
-                # print(prod_id)
-                prod_name = soup.select_one('h3.pdtTitle').text.strip()
+                print(prod_id)
+                # prod_name = soup.select_one('h3.pdtTitle').text.strip()
+                prod_name = driver.find_element_by_css_selector('h3.pdtTitle').text.strip()
                 # print(prod_name)
-                price = soup.select_one('p.finalPrice.number.hasDC > strong').text.strip()
+                # price = soup.select_one('p.finalPrice.number.hasDC > strong').text.strip()
+                price = driver.find_element_by_css_selector('p.finalPrice.number.hasDC > strong').text.strip()
                 # print(price)
-            except:
+            except Exception as e:
+                print(e)
                 continue
             try:
-                score = soup.select_one('em.scoreMount').text.strip()
+                # score = soup.select_one('em.scoreMount').text.strip()
+                score = driver.find_element_by_css_selector('em.scoreMount').text.strip()
                 # print(score)
-                score_persons = soup.select_one('p.scoreNum').text[1:].split()[0]
+                # score_persons = soup.select_one('p.scoreNum').text[1:].split()[0]
+                score_persons = driver.find_element_by_css_selector('p.scoreNum').text[1:].split()[0]
                 # print(score_persons)
-            except:
-                print('No score excists')
+            except Exception as e:
+                print(e)
+                print('No score exists')
                 score = None
                 score_persons = 0
-            img_url = soup.select_one('#prd_ipzoom > img')['src']
+            # img_url = soup.select_one('#prd_ipzoom > img')['src']
+            #prd_ipzoom > div._frm_magnifier > div > img
+            img_url = driver.find_element_by_css_selector('#prd_ipzoom > div._frm_magnifier > div > img').get_attribute('src')
             # prd_ipzoom > div._frm_magnifier > div > img
             # print(img_url)
             # 3 types of img path
-            t1 = soup.select('#guidance > table > tbody > tr > td > p')
-            t2 = soup.select('#deal_unit_d1 > dt > p')
-            t3 = soup.select('#section_cont_1 > div.prod_detail_view.open > div > table > tbody > tr > td > p')
+            # t1 = soup.select('#guidance > table > tbody > tr > td > p')
+            t1 = driver.find_elements_by_css_selector('#guidance > table > tbody > tr > td > p')
+            # t2 = soup.select('#deal_unit_d1 > dt > p')
+            t2 = driver.find_elements_by_css_selector('#deal_unit_d1 > dt > p')
+            #section_cont_1 > div.prod_detail_view.open > div > table > tbody > tr > td > p:nth-child(1)
+            # t3 = soup.select('#section_cont_1 > div.prod_detail_view.open > div > table > tbody > tr > td > p')
+            t3 = driver.find_elements_by_css_selector('#section_cont_1 > div.prod_detail_view.open > div > table > tbody > tr > td > p')
 
             if t1:
                 # print("t1 >>",t1)
@@ -79,13 +99,15 @@ def main():
                 continue
             detail_urls = []
             for p in detail_imgs_p:
-                detail_img = p.select_one('img')
+                detail_img = p.find_elements_by_css_selector('img')
                 if not detail_img:
+                    print('no detail img')
                     continue
                 # print('detail >>', detail_img['src'])
                 # detail_img_url = detail_img['src']
                 # print(type(detail_img_url))
-                detail_urls.append(detail_img['src'])
+                while detail_img:
+                    detail_urls.append(detail_img.pop().get_attribute('src'))
                 # print(detail_urls)
             
             # print(detail_urls[0][0][0][0][0])
@@ -118,7 +140,11 @@ def main():
                 'detail_img_url':detail_urls,
                 'reg_date':str(today)
             }
-            col.insert_one(db_data)
             # print(db_data)
+            col.insert_one(db_data)
             # time.sleep(2)
             # break
+
+if __name__=='__main__':
+    main()
+    print('main')

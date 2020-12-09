@@ -38,3 +38,6 @@ def main():
             f.write(f'{url}\n')
 
     driver.quit()
+
+if __name__=='__main__':
+    main()

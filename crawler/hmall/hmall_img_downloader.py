@@ -32,3 +32,6 @@ def main():
         img_url = prod['img_url']
         urllib.request.urlretrieve(img_url, os.path.join(BASE_DIR,f"images/{today}/{i}.jpg"))
         i += 1
+
+if __name__=='__main__':
+    main()
