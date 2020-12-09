@@ -141,3 +141,11 @@ images/
 failed/
 videos/
 daily/
+*_prods.txt
+*.xlsx
+*.zip
+*.jpg
+*.png
+*.gif
+config.py
+crawler/shopnt/texts/
