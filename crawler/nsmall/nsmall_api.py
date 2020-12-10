@@ -36,7 +36,7 @@ def main():
                 # pPage = 1
                 data = { 'catalogId' : pCatalogId, 'catgroupIdChild' : pCatgroupIdChild, 'listId' : pListId, 'page' : pPage }
                 result = requests.post(url="http://www.nsmall.com/TvThemePrdtList?storeId=13001&langId=-9", data=data)
-                print(result)
+                # print(result)
                 soup = BeautifulSoup(result.text, 'html.parser')
                 # print(f'#themeTempCat{pListId}')
                 
@@ -45,12 +45,12 @@ def main():
                 item_list = soup.select('#List > ul')
                 for ul in item_list:
                     for item in ul.select('li'):
-                        print(f'page {pPage}')
+                        # print(f'page {pPage}')
                         prod_name = item.select_one('dt').text
                         print(prod_name)
                         f.write(f"{prod_name}\n")
                         # db_data['prod_name'] = prod_name
-                        print(f'{item.a["href"]}')
+                        # print(f'{item.a["href"]}')
                         item_href = 'http://www.nsmall.com'+item.a["href"][1:]
                         f.write(f'{item_href}\n')
                         # db_data['prod_detail_url'] = item_href
@@ -62,6 +62,16 @@ def main():
                         f.write(f'id: {prod_id}\n')
                         # db_data['prod_id'] = int(prod_id)
                         price = detail_soup.select_one('strong.save_price > em').text
+
+                        #dvGoodsGuideDataList > p > img
+                        detail_p = detail_soup.select('#dvGoodsGuideDataList')
+                        detail_img_url = []
+                        for p in detail_p:
+                            img = p.select('img')
+                            while img:
+                                detail_img_url.append(img.pop()['src'])
+
+                        print(detail_img_url)
                         f.write(f'price: {price}\n')
                         # db_data['prod_price'] = price
                         try:
@@ -76,7 +86,7 @@ def main():
                         # detail_img = detail_soup.select_one('#dvGoodsGuideDataList > p:nth-child(2)').img['src']
                         # print(detail_img)
                         # f.write(f'detail_img: {detail_img}\n')
-                        print(f"http:{item.img['src']}")
+                        # print(f"http:{item.img['src']}")
                         f.write(f"http:{item.img['src']}\n")
                         today = datetime.date.today()
                         # db_data['img_url'] = item.img['src']
@@ -89,6 +99,7 @@ def main():
                             'score':score,
                             'score_persons':score_persons,
                             'img_url':f'http:{item.img["src"]}',
+                            'detail_img_url':detail_img_url,
                             'reg_date':str(today)
                         }
                         db_dataset.append(db_data)
