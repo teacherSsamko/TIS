@@ -1,5 +1,5 @@
 # TIS
-Today I studied when working
+Today I studied on working
 
 ## python
 ## google API
