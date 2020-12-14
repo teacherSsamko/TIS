@@ -1,6 +1,7 @@
 import os
 import sys
 import datetime
+import html
 
 import requests
 from pymongo import MongoClient
@@ -9,6 +10,18 @@ from bs4 import BeautifulSoup
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 import config
 
+def get_detail_img_url(prod_id):
+    url = 'http://www.nsmall.com/NSItemDetailGoodsGuide?catalogId=97001&langId=-9&storeId=13001'
+    # http://www.nsmall.com/NSItemDetailGoodsGuide?catalogId=97001&langId=-9&storeId=13001
+    # "cmdType":7,"catentryId":"30214022","busChnId":"CTCOM","deviceChnId":"INT"
+    data = {
+        "cmdType":7,"catentryId":f"{prod_id}","busChnId":"CTCOM","deviceChnId":"INT"
+    }
+    result = requests.get(url, data)
+    detail_val = result.json()['jsonData']['goodsGuideDataList'][0]['specsInputVal']
+    detail_html = html.unescape(detail_val)
+    detail_soup = BeautifulSoup(detail_html, 'html.parser')
+    return detail_soup.select_one('img')['src']
 
 def main():
     conf = config.Config()
@@ -62,14 +75,15 @@ def main():
                         f.write(f'id: {prod_id}\n')
                         # db_data['prod_id'] = int(prod_id)
                         price = detail_soup.select_one('strong.save_price > em').text
-
                         #dvGoodsGuideDataList > p > img
-                        detail_p = detail_soup.select('#dvGoodsGuideDataList')
+                        # detail_p = detail_soup.select('#dvGoodsGuideDataList')
+                        # print(detail_p)
+                        # for p in detail_p:
+                        #     img = p.select('img')
+                        #     while img:
+                        #         detail_img_url.append(img.pop()['src'])
                         detail_img_url = []
-                        for p in detail_p:
-                            img = p.select('img')
-                            while img:
-                                detail_img_url.append(img.pop()['src'])
+                        detail_img_url.append(get_detail_img_url(prod_id))
 
                         print(detail_img_url)
                         f.write(f'price: {price}\n')
@@ -103,10 +117,14 @@ def main():
                             'reg_date':str(today)
                         }
                         db_dataset.append(db_data)
-
-    # with open('crawler/nsmall/db_set.txt','w') as f:
-    #     f.write("\n".join(db_dataset))
+            #             break
+            #         break
+            #     break
+            # break
+    
 
     collection.insert_many(db_dataset)
 
 
+if __name__=='__main__':
+    main()
