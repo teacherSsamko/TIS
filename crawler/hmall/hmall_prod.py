@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pymongo import MongoClient
 
 
@@ -18,7 +20,7 @@ def main():
     url = "http://www.hyundaihmall.com/front/tvPlusShopMainR.do?_IC_=tab3"
 
     driver.get(url)
-
+    WebDriverWait(driver, timeout=5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.moreCateItem')))
     driver.find_element_by_css_selector('#cateItemListIn > div.moreCateItem > a.product_more').click()
     # time.sleep(1)
     prod_items = driver.find_elements_by_css_selector('#cateItemListIn > div.pl_itemlist_wrap > ul > li > a')
