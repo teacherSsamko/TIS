@@ -101,7 +101,7 @@ def main():
             for p in detail_imgs_p:
                 detail_img = p.find_elements_by_css_selector('img')
                 if not detail_img:
-                    print('no detail img')
+                    # print('not img p')
                     continue
                 # print('detail >>', detail_img['src'])
                 # detail_img_url = detail_img['src']
@@ -109,7 +109,8 @@ def main():
                 while detail_img:
                     detail_urls.append(detail_img.pop().get_attribute('src'))
                 # print(detail_urls)
-            
+            if not detail_urls:
+                print('no detail img')
             # print(detail_urls[0][0][0][0][0])
             #['src']
             #guidance > table > tbody > tr > td > p:nth-child(1) > img
