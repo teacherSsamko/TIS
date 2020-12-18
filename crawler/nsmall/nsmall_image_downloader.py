@@ -29,7 +29,7 @@ def main():
     i = 1
 
     for prod in prod_list:
-        print(f'{i}/{total}')
+        print(f'\r{i}/{total}', end='')
         prod_id = prod['prod_id']
         img_url = prod['img_url']
         urllib.request.urlretrieve(img_url, f"{img_dir}/{today}/{prod_id}.jpg")

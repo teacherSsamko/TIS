@@ -73,6 +73,8 @@ def get_start_idx():
         if 'ok' in last_idx:
             return -1
         # 두번째 실패한 건 skip
+        elif len(idxs) < 3:
+            return 0
         else:
             before_idx = idxs[-2].strip('\n')
             print(f'before:{before_idx}/ last:{last_idx}')
@@ -140,6 +142,7 @@ def crawl_from(start_idx):
 # review_col.insert_many(review_dataset)
 
 start_idx = get_start_idx()
+print(start_idx)
 
 while True:
     try:

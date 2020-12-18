@@ -23,13 +23,10 @@ class ReviewCrawler:
     review_col = db['nsmall_reviews_test']
     prod_col = db['nsmall']
     today = datetime.date.today()
-    prod_list = list(prod_col.find({'reg_date':str(today)}))
-    print(len(prod_list))
-    review_dataset = []
+    
 
-    options = Options()
-    options.page_load_strategy = 'eager'
-    driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+    
+    
 
     if not os.path.exists(os.path.join(BASE_DIR, f'daily')):
         os.mkdir(os.path.join(BASE_DIR, f'daily'))
@@ -42,7 +39,11 @@ class ReviewCrawler:
     index_file = os.path.join(daily_index_dir, f'{today}_index.txt')
 
     def __init__(self):
+        self.review_dataset = []
         self.index_file = ReviewCrawler.index_file
+        options = Options()
+        options.page_load_strategy = 'eager'
+        self.driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
         print(self.index_file)
 
 
@@ -83,13 +84,15 @@ class ReviewCrawler:
     
 
     def crawl_from(self, start_idx):
+        prod_list = list(self.prod_col.find({'reg_date':str(ReviewCrawler.today)}))
+        print(len(prod_list))
         with open(self.index_file, 'a') as f:
             f.write('\n')
-            prod_list = self.prod_list
+            # prod_list = self.prod_list
             driver = self.driver
             for prod in prod_list[start_idx:]:
                 prod_idx = prod_list.index(prod)
-                print('INDEX ',prod_idx)
+                print(f'\rINDEX {prod_idx}', end='')
                 f.write(f'{prod_idx}')
                 # if prod['ctg'] != '푸드' and prod['prod_id'] != '29860083':
                 if prod['ctg'] != '푸드':
@@ -130,16 +133,16 @@ class ReviewCrawler:
                                 'prod_review_id':review_id,
                                 'score':score,
                                 'review':review.text,
-                                'reg_date': str(today)
+                                'reg_date': str(ReviewCrawler.today)
                             }
-                            review_dataset.append(db_data)
-                            review_col.insert_one(db_data)
+
+                            ReviewCrawler.review_col.insert_one(db_data)
                         if cur_page_no != 1:
                             current_page.find_elements_by_xpath('preceding-sibling::a[@href]')[-1].click()
                 f.write(f'\tok\n')
             driver.quit()
 
-# review_col.insert_many(review_dataset)
+
 
 
 def main():
@@ -158,11 +161,12 @@ def main():
             options = Options()
             options.page_load_strategy = 'eager'
             crawler.driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+            crawler.driver.set_window_position(-10000,0)
             crawler.start_idx = crawler.get_start_idx()
             if crawler.start_idx == -1:
                 print('finish well')
                 break
             continue
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
