@@ -1,6 +1,8 @@
 import os
 import time
 import datetime
+import json
+import difflib
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,13 +22,14 @@ today = datetime.date.today()
 
 prod_list = list(col.find({'reg_date':str(today)}))
 
-options = Options()
-options.page_load_strategy = 'eager'
-driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
+# options = Options()
+# options.page_load_strategy = 'eager'
+# driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloads/chromedriver")
 
 url_prefix = 'https://www.shoppingntmall.com/display/goods/'
 
-detail_img_api = 'http://www.shoppingntmall.com/display/goods/detail/describe/{prod_id}'
+
+headers = {'Content-Type': 'application/json; charset=utf-8'}
 
 
 # with open(os.path.join(BASE_DIR,'prod_id_list08.txt'), 'r') as f:
@@ -35,14 +38,12 @@ detail_img_api = 'http://www.shoppingntmall.com/display/goods/detail/describe/{p
 total = len(prod_list)
 current = 1
 for prod in prod_list:
-    prod_id = prod['prod_id']
-    url = url_prefix + prod_id
+    prod_id = str(prod['prod_id'])
+    # print(prod_id)
+    detail_img_api = 'http://www.shoppingntmall.com/display/goods/detail/describe/' + prod_id
+    detail_img_api = detail_img_api.strip()
 
     print(f'{current}/{total}')
-    print(url)
-    driver.get(url)
-    time.sleep(1)
-
     #goods_describe > div > div > p > img:nth-child(1)
 
     # try:
@@ -57,16 +58,25 @@ for prod in prod_list:
     #     price = '0'
     #     img_url = 'https://img.shoppingntmall.com/goods/480/10011480_ss.jpg'
     try:
-        detail_imgs = driver.find_elements_by_css_selector('#goods_describe > div > div > p > img')
+        data = requests.get(detail_img_api)
+        result = json.loads(data.text)
+        detail_html = result['describe']['describeExt']
+        soup = BeautifulSoup(data.text, 'html.parser')
+        detail_imgs = soup.select("img")
+        # detail_imgs = driver.find_elements_by_css_selector('#goods_describe > div > div > p > img')
         detail_imgs_url = []
         for img in detail_imgs:
-            detail_imgs_url.append(img.get_attribute('src'))
-    except:
+            src = img['src'].strip("\\\"")
+            # print(src)
+            detail_imgs_url.append(src)
+
+    except Exception as e:
+        print(e)
         print(f'prod id: {prod_id} is not available now')
         current += 1
         continue
-
-
+    # print('\n'.join(detail_imgs_url))
+    # break
     # try:
     # driver.find_element_by_css_selector('div.star_wrap').click()
     # print('click')
@@ -79,7 +89,7 @@ for prod in prod_list:
     #     score = None
     #     score_persons = 0
     # print('img urls: ',detail_imgs_url)
-    col.find_one_and_update({'prod_id':prod_id}, {'$set':{'detail_imgs_url':detail_imgs_url}})
+    col.find_one_and_update({'prod_id':prod_id}, {'$set':{'detail_img_url':detail_imgs_url}})
 
     # db_data = {
     #     'prod_id': prod_id,
@@ -95,4 +105,4 @@ for prod in prod_list:
     # if current == 3:
     #     break
 
-driver.quit()
+
