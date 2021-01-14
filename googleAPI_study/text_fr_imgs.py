@@ -157,10 +157,10 @@ def remote_mongo():
                 try:
                     texts = detect_text_uri(url)
                 except:
-                    i += 1
                     # errors += f'{pid}\n'
                     errors = f'{pid}\n'
                     f.write(errors)
+                    col.find_one_and_update({'prod_id':pid}, {'$set':{"desc":'error'}})
                     break
                 text += ''.join(texts)
             if text != '':
