@@ -141,17 +141,19 @@ def remote_mongo():
         err = f.readlines()
     
     err_dic = {pid.strip():1 for pid in err}
-    details = list(col.find({"detail_imgs_url":{'$exists':True}, "desc":{'$exists':False}, "prod_name":{"$not":re.compile("페이지 없음")}}))
+    # details = list(col.find({"detail_imgs_url":{'$exists':True}, "desc":{'$exists':False}, "prod_name":{"$not":re.compile("페이지 없음")}}))
+    details = list(col.find({"detail_img_url":{'$exists':True}, "desc":{'$exists':False}, "prod_name":{"$not":re.compile("페이지 없음")}}))
     total = len(details) - len(err)
     i = 1
     print(total)
     errors = ''
-    with open(os.path.join(BASE_DIR, 'errors.txt'), 'w') as f:
+    with open(os.path.join(BASE_DIR, 'errors.txt'), 'a') as f:
         for d in details:
             pid = d['prod_id']
             if err_dic.get(pid.strip()):
                 continue
-            urls = d['detail_imgs_url']
+            # urls = d['detail_imgs_url']
+            urls = d['detail_img_url']
             text = ''
             for url in urls:
                 try:
