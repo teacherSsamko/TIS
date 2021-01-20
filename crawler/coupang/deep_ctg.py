@@ -32,14 +32,39 @@ hdr =  {
 
 }
 
-with open(os.path.join(BASE_DIR, 'level4_5url.txt'), 'r') as f:
+with open(os.path.join(BASE_DIR, 'level5_url_v2.txt'), 'r') as f:
+# with open(os.path.join(BASE_DIR, 'level4_5url_v2.txt'), 'r') as f:
+# with open(os.path.join(BASE_DIR, 'ctg_url_v4.txt'), 'r') as f:
     data = f.readlines()
 
-for row in data:
-    if '%' in row:
-        print(row, end='')
+for row in data[14800:]:
+    ctg4, url = row.split("%")
+    url = url.strip()
+    res = requests.get(url, headers=hdr)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    uls = soup.select('ul.search-option-items-child')
+    for ul in uls:
+        lis = ul.select('li')
+        if lis:
+            for li in lis:
+                lv5_lis = li.select('li')
+                for li5 in lv5_lis:
+                    label = li5.select_one('label')
+                # print(ctg4+'$'+label.text, end='')
+                    print(ctg4+'$'+label.text)
+                # a = li.select_one('a')
+                # if a:
+                #     print('%'+coupang_url+li['data-link-uri'])
+                # else:
+                #     print()
+            break
 
-# for row in data[4:]:
+
+# for row in data:
+#     if '%' in row:
+#         print(row, end='')
+
+# for row in data:
 #     ctg3, url = row.split("%")
 #     url = url.strip()
 #     res = requests.get(url, headers=hdr)
