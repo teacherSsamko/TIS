@@ -10,7 +10,7 @@ from pymongo import MongoClient
 
 mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
-col = db['sk_prod']
+col = db['gong_prod']
 
 options = Options()
 options.page_load_strategy = 'eager'
