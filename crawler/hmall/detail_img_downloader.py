@@ -34,7 +34,7 @@ def main():
     total = len(prod_list) - 1
     for prod in prod_list:
         now = prod_list.index(prod)
-        # print(f'{now}/ {total}')
+        print(f'\r{now}/ {total}',end='')
         prod_id = prod['prod_id']
         img_urls = prod['detail_img_url']
         i = 0

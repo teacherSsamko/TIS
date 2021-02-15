@@ -16,7 +16,7 @@ from pymongo import MongoClient
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 import config
 
-def main():
+def main(start_i=0):
     conf = config.Config()
 
 
@@ -35,7 +35,7 @@ def main():
 
     with open(f'crawler/hmall/daily/{today}.txt','r') as f:
         urls = f.readlines()
-        for url in urls:
+        for url in urls[start_i:]:
             # print(url)
             # data = requests.get(url)
             # soup = BeautifulSoup(data.text, 'html.parser')
@@ -147,5 +147,10 @@ def main():
             # break
 
 if __name__=='__main__':
-    main()
     print('main')
+    if len(sys.argv) >= 2:
+        i = int(sys.argv[1])
+        print(i)
+        main(i)
+    else:
+        main()

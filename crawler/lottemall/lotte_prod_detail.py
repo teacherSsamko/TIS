@@ -20,7 +20,7 @@ driver = webdriver.Chrome(options=options,executable_path="/Users/ssamko/Downloa
 today = datetime.date.today()
 
 with open(f'crawler/lottemall/daily/{today}_details.txt', 'r') as f:
-    urls = f.readlines()[24:]
+    urls = f.readlines()
     for url in urls:
         driver.get(url)
         time.sleep(2)
@@ -32,6 +32,12 @@ with open(f'crawler/lottemall/daily/{today}_details.txt', 'r') as f:
             continue
         driver.find_element_by_css_selector('a.product_thumb').click()        
         img_url = driver.find_element_by_css_selector('div.thumb_product > a > img').get_attribute('src')
+
+        img_sec = driver.find_elements_by_css_selector('div.img_statem > img')
+        detail_img_url = []
+        for img in img_sec:
+            detail_img_url.append(img.get_attribute('src'))
+
         video_url = driver.find_element_by_css_selector('video.vjs-tech').get_attribute('src')
         db_data = {
             'prod_id': int(prod_id),
@@ -40,13 +46,15 @@ with open(f'crawler/lottemall/daily/{today}_details.txt', 'r') as f:
             'score': None,
             'score_persons': 0,
             'img_url':img_url,
+            'detail_img_url':detail_img_url,
             'video_url':video_url,
             'reg_date':str(today)
         }
         print(prod_id)
-        print(prod_name)
-        print(price)
-        print(img_url)
+        # print(prod_name)
+        # print(price)
+        # print(img_url)
+        print(detail_img_url)
         print()
         col.insert_one(db_data)
 
