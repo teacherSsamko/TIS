@@ -1,21 +1,24 @@
 import asyncio
 import time
 
-@asyncio.coroutine
-def eternity():
-    time.sleep(3600)
-    print('yay!')
+async def say_after(delay, what):
+    await asyncio.sleep(delay)
+    print(what)
 
-@asyncio.coroutine
-def main():
-    pass
+async def nested():
+    return 42
 
+async def main():
+    task1 = asyncio.create_task(say_after(1, 'hello'))
+    task2 = asyncio.create_task(say_after(2, 'world'))
 
-loop = asyncio.get_event_loop()
+    print(f'started at {time.strftime("%X")}')
+    
+    await task1
+    await task2
 
-loop.create_task(eternity())
+    print(f'finished at {time.strftime("%X")}')
+    
 
-try:
-    loop.run_forever()
-except:
-    loop.close()
+if __name__ == '__main__':
+    asyncio.run(main())
