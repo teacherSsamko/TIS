@@ -39,6 +39,7 @@ class Director:
 
     def check_avail_worker(self):
         for worker_idx, status in self.workers.items():
+            print(f'worker status\n{worker_idx} - {status}')
             if not status:
                 return worker_idx
         print('No avail worker')
@@ -53,11 +54,14 @@ class Director:
         print(self.task_to_do)
 
     def check_done_worker(self):
+        print("check worker")
         for idx, worker in self.workers.items():
+            print(f'worker status in check done {idx} - {worker}')
             if worker and worker.isFinish:
                 print(f'worker {worker.idx} finished')
                 self.workers[idx] = None
-                del worker
+                print(worker)
+                # del worker
 
     async def work(self, tasks):
         self.task_to_do = tasks
@@ -79,9 +83,9 @@ class Director:
 
 
 async def main():
-    tasks = random.sample(range(20), 10)
+    tasks = random.sample(range(30), 15)
     print(tasks)
-    director = Director(4)
+    director = Director(6)
     async_task1 = asyncio.create_task(director.work(tasks))
     print('task start')
     await async_task1
