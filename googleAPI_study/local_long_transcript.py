@@ -27,7 +27,6 @@ def sample_long_running_recognize(local_file_path):
     encoding = enums.RecognitionConfig.AudioEncoding.LINEAR16
     config = {
         "language_code": language_code,
-        "audio_channel_count": 2,
         "encoding": encoding,
     }
     # with io.open(local_file_path, "rb") as f:
@@ -39,12 +38,12 @@ def sample_long_running_recognize(local_file_path):
 
     print(u"Waiting for operation to complete...")
     response = operation.result()
-    with open('crawler/ssg/videos/script/test.txt','w') as f:
+    with open('crawler/ssg/videos/script/test2.txt','w') as f:
         for result in response.results:
             # First alternative is the most probable result
             for alternative in result.alternatives:
                 print(u"Transcript: {}".format(alternative.transcript))
-                f.write(alternative.transcript)
+                f.write(f'{alternative.transcript}\n')
 
 def sample_recognize(local_file_path, model):
     """

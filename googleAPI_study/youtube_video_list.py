@@ -86,6 +86,7 @@ def youtube_search(options):
     #   print("Playlists:\n", "\n".join(playlists), "\n")
     next_page = search_response.get("nextPageToken")
     if next_page:
+        # issue! 똑같은게 반복된다.
         v_ids.extend(next_page_search(youtube, next_page, v_ids))
 
     print("\nfinal\n")

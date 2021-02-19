@@ -12,34 +12,35 @@ if not os.path.exists(audio_path):
 
 # vod = vod_list[1]
 # vod = os.path.join(video_dir_path, vod)
-vod = 'crawler/ssg/videos/1000032803536.mp4'
-print(vod)
-filename = vod.split("/")[-1].split(".")[0]
-filename = os.path.join(audio_path, filename)
-print(filename)
+# vod = 'crawler/ssg/videos/1000032803536.mp4'
+# print(vod)
+# filename = vod.split("/")[-1].split(".")[0]
+# filename = os.path.join(audio_path, filename)
+# print(filename)
 # cmd = f'ffmpeg -i {vod} -c:a aac -ab 192000 -vn {filename}.m4a'
-cmd = f'ffmpeg -i {vod} {filename}.wav'
+# cmd = f'ffmpeg -i {vod} {filename}.wav'
+# cmd = f'ffmpeg -i {vod} -ac 1 {filename}.wav'
 # ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3
-result = os.system(cmd)
+# result = os.system(cmd)
 
-cmd = f'base64 {filename}.wav > {filename}.txt'
-result = os.system(cmd)
-print(result)
+# cmd = f'base64 {filename}.wav > {filename}.txt'
+# result = os.system(cmd)
+# print(result)
 
-# for vod in vod_list:
-#     vod = os.path.join(video_dir_path, vod)
-#     print(vod)
-#     filename = vod.split("/")[-1].split(".")[0]
-#     filename = os.path.join(audio_path, filename)
-#     print(filename)
-#     # cmd = f'ffmpeg -i {vod} -c:a aac -ab 192000 -vn {filename}.m4a'
-#     cmd = f'ffmpeg -i {vod} {filename}.wav'
-#     # ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3
-#     result = os.system(cmd)
+for vod in vod_list:
+    vod = os.path.join(video_dir_path, vod)
+    print(vod)
+    filename = vod.split("/")[-1].split(".")[0]
+    filename = os.path.join(audio_path, filename)
+    print(filename)
+    # cmd = f'ffmpeg -i {vod} -c:a aac -ab 192000 -vn {filename}.m4a'
+    cmd = f'ffmpeg -i {vod} -ac 1 {filename}.wav'
+    # ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3
+    result = os.system(cmd)
 
-#     cmd = f'base64 {filename}.wav > {filename}.txt'
-#     result = os.system(cmd)
-#     print(result)
-#     break
+    # cmd = f'base64 {filename}.wav > {filename}.txt'
+    # result = os.system(cmd)
+    print(result)
+
         
 

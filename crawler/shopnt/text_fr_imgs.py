@@ -8,6 +8,7 @@ text_dir = 'texts'
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 today = datetime.date.today()
+start_t = datetime.datetime.now()
 
 if not os.path.exists(os.path.join(BASE_DIR, text_dir)):
     os.mkdir(os.path.join(BASE_DIR, text_dir))
@@ -50,13 +51,13 @@ def detect_text(path):
     return test_list
 
 
-img_dir = os.path.join(BASE_DIR, f'detail_images/{today}')
+img_dir = os.path.join(BASE_DIR, f'detail/{today}')
 imgs = os.listdir(img_dir)
 
 total = len(imgs)
-for img in imgs[724:]:
+for img in imgs:
     i = imgs.index(img)
-    print(f'{i}/{total}')
+    
     img_abs_path = os.path.join(img_dir, img)
     try:
         texts = detect_text(img_abs_path)
@@ -68,6 +69,9 @@ for img in imgs[724:]:
         text = ' '.join(texts)
         text = re.sub('\n', ' ', text)
         txtfile.write(text)
+    finish_t = datetime.datetime.now()
+    runtime = finish_t - start_t
+    print(f'\r{i}/{total} runtime={runtime}',end='')
 
 # texts = detect_text('/Users/ssamko/Downloads/detail_img/19W_OKS_WJP4_04_03.jpg')
 # print(''.join(texts))

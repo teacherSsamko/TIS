@@ -19,6 +19,6 @@ for i, text in enumerate(texts):
     print(f'\r{i}/{total}', end='')
     with open(os.path.join(ROOT_DIR,text), 'r') as f:
         desc = f.readlines()
-        desc = '\n'.join(desc)
+        desc = ''.join(desc)
     prod_id = text.split('.')[0]
     col.find_one_and_update({'prod_id':prod_id}, {'$set':{'desc':desc}})

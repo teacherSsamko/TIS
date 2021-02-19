@@ -8,14 +8,11 @@ import (
 )
 
 func main() {
-	db, _ := sql.Open("mysql", "ssamko:pwd@tcp(127.0.0.1:3306)/pwd")
+	db, _ := sql.Open("mysql", "ssamko:dmstjq@tcp(127.0.0.1:3306)/pikavue")
 	defer db.Close()
 
 	var version string
 	db.QueryRow("SELECT VERSION()").Scan(&version)
 	fmt.Println("Connected to:", version)
-
-	// var wg sync.WaitGroup
-	// for i := 0; i
 
 }

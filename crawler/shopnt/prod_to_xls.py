@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from openpyxl import Workbook, load_workbook
 from pymongo import MongoClient
@@ -6,6 +7,8 @@ from pymongo import MongoClient
 mongo = MongoClient("mongodb://localhost:27017")
 db = mongo['aircode']
 col = db['shopnt_prod']
+
+today = datetime.date.today()
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -31,4 +34,4 @@ for row in data_rows:
 for row in rows:
     prod_xls.active.append(row)
 
-prod_xls.save(os.path.join(BASE_DIR, 'prods.xlsx'))
+prod_xls.save(os.path.join(BASE_DIR, f'prods_{today}.xlsx'))

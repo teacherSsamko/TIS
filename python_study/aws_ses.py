@@ -16,7 +16,9 @@ RECIPIENT = "ssamko@gdflab.com"
 # Specify a configuration set. If you do not want to use a configuration
 # set, comment the following variable, and the 
 # ConfigurationSetName=CONFIGURATION_SET argument below.
-CONFIGURATION_SET = config.AWS_CONFIGURATION_SET
+# CONFIGURATION_SET = config.AWS_CONFIGURATION_SET
+CONFIGURATION_SET = "ConfigSet"
+
 
 # If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
 AWS_REGION = config.AWS_REGION

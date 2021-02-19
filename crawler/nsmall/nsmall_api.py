@@ -2,6 +2,7 @@ import os
 import sys
 import datetime
 import html
+import re
 
 import requests
 from pymongo import MongoClient
@@ -74,7 +75,15 @@ def main():
                         prod_id = item_href.split("=")[4].split("&")[0]
                         f.write(f'id: {prod_id}\n')
                         # db_data['prod_id'] = int(prod_id)
-                        price = detail_soup.select_one('strong.save_price > em').text
+                        price = detail_soup.select_one('strong.save_price > em').text.strip()
+                        price = re.sub(r'[,]','',price)
+                        #ns_detail > div.area > div.detail_contArea1 > div.det_view.prd_detail > div.dv_left > div.dv_left2 > div.section.zin1 > dl:nth-child(1) > dd > strong
+                        try:
+                            salesPrice = detail_soup.select_one('strong.price_before').text.strip()
+                            salesPrice = re.sub(r'[,원]','',salesPrice)
+                        except:
+                            salesPrice = price
+                        priceDcAmt = int(salesPrice) - int(price)
                         #dvGoodsGuideDataList > p > img
                         # detail_p = detail_soup.select('#dvGoodsGuideDataList')
                         # print(detail_p)
@@ -84,6 +93,7 @@ def main():
                         #         detail_img_url.append(img.pop()['src'])
                         detail_img_url = []
                         detail_img_url.append(get_detail_img_url(prod_id))
+
 
                         print(detail_img_url)
                         f.write(f'price: {price}\n')
@@ -105,11 +115,17 @@ def main():
                         today = datetime.date.today()
                         # db_data['img_url'] = item.img['src']
                         f.write('\n')
+                        #ns_detail > div.area > div.detail_contArea1 > div.det_view.prd_detail > div.dv_left > div.dv_left2 > div:nth-child(3) > dl > dd > em
+                        # freeOfInterestText = detail_soup.select_one('div.section2 > dl > dd > em').text
+                        # creditCardDc = 
+
                         db_data = {
                             'ctg':ctg_name,
                             'prod_id':int(prod_id),
                             'prod_name':prod_name,
                             'prod_price':price,
+                            'salesPrice':salesPrice,
+                            'priceDcAmt':priceDcAmt,
                             'score':score,
                             'score_persons':score_persons,
                             'img_url':f'http:{item.img["src"]}',

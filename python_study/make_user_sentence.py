@@ -16,7 +16,7 @@ col = db['shopnt_settop']
 
 stids_info = list(col.find())
 
-with open(os.path.join(BASE_DIR, 'data/sentece_from_settop.txt'), 'w') as f:
+with open(os.path.join(BASE_DIR, 'data/sentence_from_settop.txt'), 'w') as f:
     for info in stids_info:
         sentence = ""
         stid = info['stid'][0]

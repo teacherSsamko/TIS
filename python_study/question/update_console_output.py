@@ -1,5 +1,5 @@
 """
-How to update console output
+How to update console output (for python version 2.x)
 """
 import sys
 import time
